@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>try { history.scrollRestoration = "manual"; } catch (e) {}</script>
+    <meta charset="UTF-8">
+    <script>(function(){var t=null;try{t=localStorage.getItem("mka-theme")}catch(e){}if(!t){t="light"}document.documentElement.setAttribute("data-theme",t);})();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Artificial Intelligence and Machine Learning</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cstyle%3E.bg%7Bfill%3A%23F4F1EA%7D.m%7Bfill%3A%2316294D%7D%40media%20%28prefers-color-scheme%3Adark%29%7B.bg%7Bfill%3A%23171512%7D.m%7Bfill%3A%23FF7A88%7D%7D%3C%2Fstyle%3E%3Crect%20class%3D%22bg%22%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%229%22%2F%3E%3Ctext%20class%3D%22m%22%20x%3D%2232%22%20y%3D%2246%22%20font-family%3D%22Georgia%2Cserif%22%20font-style%3D%22italic%22%20font-size%3D%2240%22%20text-anchor%3D%22middle%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,560;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="studio.css?v=101">
+  </head>
+
+<body>
+
+<nav class="main-nav skill-nav" aria-label="Technical skills">
+    <a class="nav-brand" href="index.html" target="_top" aria-label="Portfolio, home">
+      <span class="nb-mark" aria-hidden="true">M</span>
+      <span class="nb-word">Portfolio</span>
+    </a>
+    <div class="nav-links" id="skillNavLinks">
+      <a href="Programming-languages.html"><span>Languages</span></a>
+      <a href="DSA.html"><span>DSA</span></a>
+      <a href="Frontend.html"><span>Frontend</span></a>
+      <a href="Backend.html"><span>Backend</span></a>
+      <a href="databases.html"><span>Databases</span></a>
+      <a href="apis.html"><span>APIs</span></a>
+      <a href="aiml.html" class="active" aria-current="page"><span>AI / ML</span></a>
+      <a href="deployment.html"><span>Deployment</span></a>
+      <a href="tools.html"><span>Tools</span></a>
+    </div>
+    <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+      <span class="nav-burger" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+  </nav>
+<button class="skill-overlay-close" data-close-overlay aria-label="Back to main page">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+</button>
+
+
+    <main class="skill-detail-page art-aiml">
+
+<header class="skill-detail-header">
+            <span class="skill-detail-label">Technical Skill</span>
+            <h1>Artificial Intelligence and Machine Learning</h1>
+            <p>Artificial Intelligence and Machine Learning technologies.</p>
+        </header>
+
+        <section class="language-list">
+
+            <div class="language-card">
+                <span class="language-number">01</span>
+
+                <div class="language-content">
+                    <h2>Currently Learning</h2>
+                    <p>Currently learning Artificial Intelligence and Machine Learning.</p>
+                </div>
+            </div>
+
+        </section>
+</main>
+  <script src="theme.js?v=5"></script>
+  <script src="motion.js?v=23"></script>
+  <script>
+  // X button → main page wapas (overlay me ho to parent ko bolo)
+  document.querySelector("[data-close-overlay]")?.addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.parent === window) { window.location.href = "index.html#skills"; return; }
+    window.parent.postMessage({ type: "closeBeyondOverlay" }, window.location.origin);
+  });
+</script>
+</body>
+</html>

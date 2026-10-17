@@ -1,0 +1,2351 @@
+/* ════════════════════════════════════════════════════════════════
+   PAPER & INK editorial design system
+   Mohit Kumar Acharya · portfolio · 2026
+   Light editorial canvas + dark cinematic "Beyond" chapter.
+   One stylesheet. No per-title colour drift. Typography does the work.
+   ════════════════════════════════════════════════════════════════ */
+/* ── 1 · TOKENS ─────────────────────────────────────────────────── */
+:root{
+  /* ── LIGHT (default) ── */
+  --bg: #F4F1EA;
+  --bg-2: #ECE8DE;
+  --surface: #FBF9F4;
+  --text: #171512;
+  --text-2: #57534A;
+  --text-3: #8B8679;
+  --line: rgba(23, 21, 18, .16);
+  --line-soft: rgba(23, 21, 18, .07);
+  --mark: #16294D; /* DARK NAVY BLUE (light theme) */
+  --mark-soft: rgba(22, 41, 77, .14);
+  --mark-ink: #16294D; /* navy accent text (light) */
+  --sel-text: #171512;
+  --shadow: rgba(23, 21, 18, .08);
+  --footer-bg: #171512;
+  --footer-text: #EDEBE4;
+  --footer-text-2: #A29D92;
+  --footer-line: rgba(237, 235, 228, .16);
+  /* overlay ab THEME-AWARE light me light, dark me dark */
+  --ov-bg: #FBF9F4;
+  --ov-line: rgba(23, 21, 18, .16);
+  --ov-text: #171512;
+  --ov-text-2: #57534A;
+  --ov-mark: #16294D;
+  --rail: #16294D;
+  --serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --wrap: 1180px;
+  --pad: clamp(20px, 4vw, 48px);
+  --bar-h: 62px;
+  --player-h: 64px;
+  --ease: cubic-bezier(.22, .61, .21, 1);
+}
+/* ── DARK THEME toggle se ── */
+:root[data-theme="dark"]{
+  --bg: #100F0D;
+  --bg-2: #171613;
+  --surface: #1C1A16;
+  --text: #EDEBE4;
+  --text-2: #B3AEA3;
+  --text-3: #85806F;
+  --line: rgba(237, 235, 228, .16);
+  --line-soft: rgba(237, 235, 228, .07);
+  --mark: #FF3B52; /* cherry neon */
+  --mark-soft: rgba(255, 59, 82, .22);
+  --ov-bg: #0C0B0A;
+  --ov-line: rgba(237, 235, 228, .16);
+  --ov-text: #EDEBE4;
+  --ov-text-2: #A29D92;
+  --ov-mark: #FF3B52;
+  --rail: #FF3B52;
+  --mark-ink: #FF5C70; /* cherry neon text */
+  --sel-text: #100F0D;
+  --shadow: rgba(0, 0, 0, .5);
+  --footer-bg: #1A1815;
+  --footer-text: #EDEBE4;
+  --footer-text-2: #A29D92;
+  --footer-line: rgba(237, 235, 228, .14);
+}
+/* ── 2 · RESET & BASE ───────────────────────────────────────────── */
+*, *::before, *::after{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body{
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img{ max-width: 100%; display: block; }
+a{ color: inherit; }
+button{ font-family: inherit; }
+::selection{ background: var(--mark); color: var(--sel-text); }
+h1, h2, h3, h4{
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -.015em;
+  margin: 0;
+}
+p{ margin: 0; }
+/* micro caps label the system's small voice */
+.welcome-eyebrow, .beyond-eyebrow, .beyond-card-eyebrow, .skill-detail-label, .hero-label, .footer-tag, .journey-date, .language-number, .verse-detail-tag, .thank-eyebrow, .hobby-tint, .coming-language, .skill-nav-item, .footer-copy{
+  font-family: var(--sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+/* scroll reveal */
+.reveal{ opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.is-visible{ opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){
+html{ scroll-behavior: auto; }
+.reveal{ opacity: 1; transform: none; transition: none; }
+*, *::before, *::after{ animation-duration: .001s !important; transition-duration: .001s !important; }
+
+}
+/* ── 3 · SITE HEADER / NAV (light pages) ────────────────────────── */
+.site-header{
+  position: sticky; top: 0; z-index: 60;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  transform: translateZ(0); /* alag compositor layer sticky kabhi nahi phislega */
+  transition: box-shadow .35s var(--ease), border-color .35s var(--ease);
+}
+.site-header.is-scrolled{ box-shadow: 0 12px 34px rgba(0, 0, 0, .07); }
+:root[data-theme="dark"] .site-header.is-scrolled{ box-shadow: 0 12px 34px rgba(0, 0, 0, .45); }
+.main-nav{
+  display: flex; justify-content: space-between; align-items: center; gap: clamp(10px, 1.6vw, 20px);
+  min-height: var(--bar-h);
+  padding: 8px var(--pad);
+  overflow-x: auto; scrollbar-width: none;
+}
+.main-nav::-webkit-scrollbar{ display: none; }
+.main-nav a{
+  position: relative;
+  font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text-2); text-decoration: none; white-space: nowrap;
+  padding: 9px 4px; letter-spacing: .16em;
+  transition: color .25s var(--ease);
+}
+.main-nav a::after{
+  content: ""; position: absolute; left: 2px; right: 2px; bottom: 3px; height: 2px;
+  background: var(--mark); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left; transition: transform .34s var(--ease);
+}
+.main-nav a:hover{ color: var(--text); }
+.main-nav a:hover::after, .main-nav a.active::after{ transform: scaleX(1); }
+.main-nav a.active{ color: var(--text); }
+.main-nav a[href="beyond.html"], .main-nav a[href$="beyond.html"]{ color: var(--text); }
+.main-nav a[href="beyond.html"]::before, .main-nav a[href$="beyond.html"]::before{ content: "↗ "; color: var(--mark-ink); }
+/* ── 4 · WELCOME / HERO (light) ─────────────────────────────────── */
+.welcome{
+  position: relative;
+  min-height: calc(100svh - var(--bar-h));
+  display: flex; align-items: center;
+  padding: clamp(48px, 8vh, 96px) var(--pad) calc(var(--player-h) + clamp(28px, 5vh, 56px));
+  overflow: hidden;
+}
+.welcome-orbits{ display: none; }
+/* old gimmick, retired */
+.welcome-inner{ width: min(var(--wrap), 100%); margin: 0 auto; position: relative; display: block; }
+.welcome-eyebrow{ color: var(--text-3); display: block; margin-bottom: 22px; }
+.welcome-eyebrow::before{ content: none; color: var(--mark-ink); }
+#welcomeGreeting{
+  display: block; font-family: var(--serif); font-style: italic;
+  font-size: clamp(18px, 2.4vw, 26px); color: var(--text-2); margin-bottom: 6px;
+}
+.welcome-name{
+  display: inline;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  font-size: clamp(52px, 10.5vw, 132px);
+  font-weight: 560;
+  line-height: .95;
+  letter-spacing: -.03em;
+  max-width: 12ch;
+}
+.welcome-name .marker{ background: none; }
+.welcome-subtitle{
+  margin-top: 26px; max-width: 46ch;
+  font-size: clamp(15px, 1.6vw, 18px); color: var(--text-2); line-height: 1.75;
+}
+.welcome-cta{
+  display: inline-flex; align-items: center; gap: 10px; margin-top: 38px;
+  margin-left: -12px; padding: 10px 12px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+  border: 1px solid var(--text);
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat 0 0 / 0% 100%;
+  transition: color .3s var(--ease), border-color .3s var(--ease), background-size .4s var(--ease);
+}
+/* Desktop mouse: :hover. Phone: sirf ungli se touch par .hv (motion.js) — tap ke baad atakta nahi */
+@media (hover: hover) and (pointer: fine){
+  .welcome-cta:hover{ color: var(--bg); border-color: var(--mark); background-size: 100% 100%; }
+  .welcome-cta:hover span{ transform: translateY(3px); }
+}
+.welcome-cta.hv, .welcome-cta:focus-visible{
+  color: var(--bg); border-color: var(--mark);
+  background-size: 100% 100%;
+}
+.welcome-cta.hv span{ transform: translateY(3px); }
+.welcome-cta:focus-visible{ outline: 2px solid var(--mark); outline-offset: 4px; }
+.welcome-cta span{ transition: transform .25s var(--ease); }
+/* editorial meta table, right of the hero */
+.welcome-meta{
+  position: absolute; right: var(--pad); bottom: calc(var(--player-h) + 16px); width: 250px;
+  border-top: 1px solid var(--line);
+}
+.welcome-meta div{
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--line-soft);
+  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+}
+.welcome-meta dt, .welcome-meta span:first-child{ color: var(--text-3); font-weight: 600; }
+.welcome-meta span:last-child{ color: var(--text); font-weight: 600; text-align: right; }
+@media (max-width: 900px){
+.welcome-meta{ display: none; }
+
+}
+/* ── 5 · SHOWCASE SECTIONS (light) ──────────────────────────────── */
+.showcase-section{
+  padding: clamp(64px, 10vh, 116px) var(--pad);
+  border-top: 1px solid var(--line);
+  counter-increment: sec;
+}
+.showcase-section > .section-title,
+.showcase-section .skills-header .section-title{
+  position: relative;
+  font-size: clamp(30px, 4.6vw, 54px);
+  letter-spacing: -.02em;
+}
+.showcase-section > .section-title::before,
+.showcase-section .skills-header .section-title::before{
+  content: none; /* v71: section number hataya */
+  position: absolute; top: -14px; left: 0;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  letter-spacing: .1em; color: var(--mark-ink);
+}
+.skills-header{
+  display: grid; grid-template-columns: auto 1fr;
+  align-items: center; column-gap: 26px; row-gap: 16px;
+}
+.skills-header > .section-title{ grid-column: 1; margin: 0; }
+.skills-header > .skills-title-line{ grid-column: 2; margin-top: 0; }
+.skills-header > p{ grid-column: 1 / -1; margin: 0; }
+.skills-title-line{ flex: 1; height: 1px; background: var(--line); }
+.section-body{ margin-top: 34px; }
+/* generic grids */
+.courses-grid, .skills-grid, .internships-grid, .soft-skills-grid,
+.achievements .courses-grid{
+  display: grid; gap: 14px; margin-top: 34px;
+  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+}
+/* skill category cards (index → overlay pages) */
+.skill-card{
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 22px 22px 22px 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  text-decoration: none;
+  transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.skill-card.hv{
+  transform: translateY(-3px);
+  background: var(--mark);
+  border-color: var(--mark);
+  box-shadow: 0 14px 34px var(--glow);
+}
+.skill-card.hv h3,
+.skill-card.hv .skill-card-content,
+.skill-card.hv .skill-info,
+.skill-card.hv p,
+.skill-card.hv .placeholder-note{ color: #FFFFFF; }
+.skill-card h3{ font-size: 19px; letter-spacing: -.01em; }
+.skill-arrow{
+  display: grid; place-items: center; width: 34px; height: 34px; flex: none;
+  /* DEFAULT: poora circle RED bhara hua, arrow SAFED */
+  border: 1px solid var(--mark); border-radius: 999px;
+  background: var(--mark); color: #FFFFFF;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+/* HOVER: poora card RED, circle SAFED, arrow RED */
+.skill-card.hv .skill-arrow{
+  background: #FFFFFF; border-color: #FFFFFF; color: var(--mark);
+}
+/* course / achievement / generic content cards */
+.course-card, .hobby-card, .internships-grid > *, .soft-skills-grid > *{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 24px;
+  transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.course-card.hv, .hobby-card:hover{ transform: translateY(-3px); border-color: var(--text); box-shadow: 0 14px 34px rgba(23,21,18,.08); }
+.course-card h3, .hobby-card h3{ font-size: 19px; margin-bottom: 8px; }
+.course-card p, .hobby-card p, .section-body p{ color: var(--text-2); font-size: 14.5px; }
+.placeholder-note{ color: var(--text-3); font-style: italic; font-family: var(--serif); }
+/* about / hero-about */
+.hero-about{ display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(30px, 5vw, 80px); align-items: start; }
+.hero-left .hero-bigname{
+  font-size: clamp(56px, 12vw, 148px);
+  font-weight: 560; letter-spacing: -.04em; line-height: .9;
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat left bottom / 100% 2px;
+  padding-bottom: 10px;
+}
+.hero-tagline{
+  margin-top: 10px; font-family: var(--serif); font-style: italic;
+  font-size: clamp(17px, 2.2vw, 24px); color: var(--text-2);
+}
+.hero-block{ margin-top: 34px; }
+.hero-label{ display: block; color: var(--text-3); margin-bottom: 14px; }
+.hero-label::before{ content: none; color: var(--mark-ink); }
+.contact-links{ display: flex; flex-wrap: wrap; gap: 8px 10px; }
+.contact-link{
+  font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  text-decoration: none; color: var(--text);
+  border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.contact-link.hv{ background: var(--mark); border-color: var(--mark); color: #FFFFFF; }
+.hero-right{ border-left: 1px solid var(--line); padding-left: clamp(20px, 3vw, 44px); }
+.hero-right p{ color: var(--text-2); font-size: 15px; }
+.hero-right p + p{ margin-top: 14px; }
+@media (max-width: 900px){
+.hero-about{ grid-template-columns: 1fr; }
+.hero-right{ border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 26px; }
+
+}
+/* journey timeline */
+.journey-timeline{ position: relative; margin-top: 8px; padding-left: 26px; }
+.journey-timeline::before{ content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+.journey-item{ position: relative; padding: 0 0 38px 0; }
+.journey-item:last-child{ padding-bottom: 0; }
+.journey-marker{ position: absolute; left: -26px; top: 6px; }
+.journey-dot{
+  display: block; width: 11px; height: 11px; background: var(--bg);
+  border: 2px solid var(--text); border-radius: 2px; transform: rotate(45deg);
+}
+.journey-item.hv .journey-dot{ background: var(--mark); }
+.journey-content h3{ font-size: 21px; }
+.journey-date{ display: block; color: var(--text-3); margin: 6px 0 10px; }
+/* legacy generic rule removed §17 classes handle journey text */
+.journey-photo-link{ display: inline-block; margin-top: 14px; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.journey-photo{ width: 210px; height: 140px; object-fit: cover; filter: saturate(.85); transition: transform .5s var(--ease); }
+.journey-photo-link.hv .journey-photo{ transform: scale(1.07); }
+/* hobbies (light pages, if any) */
+.hobbies-grid{ display: grid; gap: 14px; margin-top: 34px; grid-template-columns: repeat(3, 1fr); }
+.hobby-card{ position: relative; overflow: hidden; min-height: 372px; display: flex; align-items: flex-end; padding: 0; }
+.hobby-bg{
+  position: absolute; inset: 0;
+  background-color: var(--bg-2);
+  background-image: var(--hbg); background-position: var(--hbg-pos, center); background-size: cover;
+  opacity: var(--hbg-o, 1); filter: saturate(.9);
+  transition: transform .6s var(--ease);
+}
+.hobby-card:hover .hobby-bg{ transform: scale(1.05); }
+.hobby-tint{ position: absolute; inset: 0; background: linear-gradient(transparent 42%, var(--bg-2) 96%); }
+.hobby-body{ position: relative; z-index: 2; padding: 22px; color: var(--text); }
+.hobby-body h3, .hobby-body h4{ font-size: 20px; color: var(--text); }
+.hobby-body p{ color: var(--text-2); font-size: 13.5px; margin-top: 8px; }
+/* ── 6 · FOOTER (both themes) ───────────────────────────────────── */
+.site-footer{ background: var(--footer-bg); color: var(--footer-text); border-top: 1px solid var(--footer-bg); }
+.site-footer-inner{
+  max-width: var(--wrap); margin: 0 auto; padding: 40px var(--pad);
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.footer-brand{ display: flex; align-items: center; gap: 16px; }
+.footer-mark{
+  display: grid; place-items: center; width: 52px; height: 52px;
+  border: 1px solid var(--footer-line); border-radius: 2px;
+  font-family: var(--serif); font-style: italic; font-size: 21px; color: var(--mark);
+}
+.footer-name{ display: block; font-family: var(--serif); font-size: 21px; letter-spacing: -.01em; }
+.footer-tag{ display: block; color: var(--footer-text-2); margin-top: 3px; }
+.footer-copy{ color: var(--footer-text-2); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; }
+/* ── 7 · SKILL DETAIL PAGES (standalone, light) ─────────────────── */
+.skill-detail-page{
+  max-width: 860px; margin: 0 auto;
+  padding: clamp(30px, 4.5vh, 60px) var(--pad) clamp(32px, 5vh, 60px);
+  /* 100svh me navbar ki height ghatayi — warna 62px ka extra scroll banta tha */
+  min-height: calc(100svh - var(--bar-h));
+}
+.skill-detail-header{ border-bottom: 1px solid var(--line); padding-bottom: 30px; }
+.skill-detail-label{ color: var(--text-3); display: block; margin-bottom: 16px; }
+.skill-detail-label::before{ content: none; color: var(--mark-ink); }
+.skill-detail-header h1{ font-size: clamp(36px, 6vw, 64px); letter-spacing: -.025em; max-width: 16ch; }
+.skill-detail-header p{ margin-top: 16px; color: var(--text-2); max-width: 56ch; }
+.language-list{ margin-top: 10px; }
+.language-card{
+  display: grid; grid-template-columns: 64px 1fr; gap: 18px;
+  padding: 26px 0; border-bottom: 1px solid var(--line-soft);
+}
+.language-number{ color: var(--mark-ink); font-family: var(--mono); font-size: 12px; letter-spacing: .08em; padding-top: 5px; }
+.language-content h2{ font-size: 22px; }
+.language-content p{ margin-top: 8px; color: var(--text-2); font-size: 14.5px; }
+.lang-bar, .lang-name{ display: none; }
+.coming-language{
+  display: inline-block; margin-top: 10px; color: var(--text-2);
+  border: 1px dashed var(--line); border-radius: 999px; padding: 5px 12px;
+}
+.skill-page-navigation, .skill-category-nav{
+  display: flex; justify-content: space-between; gap: 12px; margin-top: 46px;
+}
+.skill-page-btn{
+  display: grid; place-items: center; width: 46px; height: 46px;
+  border: 1px solid var(--line); border-radius: 999px; color: var(--text);
+  text-decoration: none; background: transparent;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.skill-page-btn:hover{ background: var(--text); border-color: var(--text); color: var(--bg); }
+.skill-nav-item{
+  text-decoration: none; color: var(--text-2); border: 1px solid var(--line);
+  border-radius: 999px; padding: 8px 16px;
+  transition: background .25s var(--ease), color .25s var(--ease);
+}
+.skill-nav-item:hover, .skill-nav-item.active{ background: var(--text); color: var(--bg); border-color: var(--text); }
+/* skill overlay (iframe modal on index) */
+.skill-overlay{
+  position: fixed; inset: 0; z-index: 90;
+  background: var(--bg);
+  display: flex; align-items: stretch; justify-content: center;
+  padding: 0;
+}
+.skill-overlay[hidden]{ display: none; }
+.skill-overlay-frame{
+  position: relative; flex: 1; max-width: none; width: 100%; height: 100%;
+  background: var(--bg); border: 0; border-radius: 0;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: none;
+}
+.skill-detail-header ~ *{ }
+#skillOverlayFrame{ flex: 1; width: 100%; border: 0; background: var(--bg); }
+.beyond-page .skill-overlay-close{
+  position: fixed; top: 18px; right: 22px; z-index: 55;
+  background: transparent; border: 1px solid var(--line); color: var(--text);
+}
+.beyond-page .skill-overlay-close:hover{ background: var(--text); color: var(--bg); }
+.skill-overlay-close, #skillOverlayClose{
+  position: absolute; top: 12px; right: 12px; z-index: 5;
+  width: 38px; height: 38px; display: grid; place-items: center;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 999px;
+  color: var(--text); font-size: 15px; cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+#skillOverlayClose:hover{ background: var(--text); color: var(--bg); }
+#skillTitle{ position: absolute; top: 20px; left: 20px; z-index: 5; font-family: var(--serif); font-style: italic; font-size: 15px; background: var(--bg); padding: 2px 10px 2px 0; }
+/* ── 8 · BEYOND DARK CINEMATIC CHAPTER ────────────────────────── */
+.beyond-page{ color: var(--text); background: var(--bg); }
+.beyond-hero{
+  position: relative;
+  padding: clamp(70px, 14vh, 150px) var(--pad) clamp(40px, 7vh, 70px);
+  border-bottom: 1px solid var(--line);
+}
+.beyond-hero-glow{ display: none; }
+.beyond-hero-content{ max-width: var(--wrap); margin: 0 auto; position: relative; }
+.beyond-eyebrow{ color: var(--text-2); display: block; margin-bottom: 20px; }
+.beyond-eyebrow::before{ content: none; color: var(--mark); }
+.beyond-hero h1{
+  font-size: clamp(44px, 8.4vw, 108px);
+  font-weight: 560; letter-spacing: -.03em; line-height: .98;
+  width: fit-content; max-width: 100%;
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat left bottom;
+  background-size: 0% 2px; /* animation se 0% → 100% hoga */
+  padding-bottom: 10px;
+}
+/* welcome text ke animation ke saath hi underline LEFT → RIGHT draw ho */
+@keyframes mkaUnderlineDraw{
+  from { background-size: 0% 2px; }
+  to { background-size: 100% 2px; }
+}
+.beyond-hero p, .beyond-hero-content p{
+  margin-top: 22px; max-width: 52ch; color: var(--text-2); font-size: clamp(14.5px, 1.5vw, 17px);
+}
+.beyond-nav{
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.beyond-nav-inner{
+  max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad);
+  display: flex; gap: clamp(14px, 2.4vw, 30px); align-items: center;
+  min-height: 54px; overflow-x: auto; scrollbar-width: none;
+}
+.beyond-nav-inner::-webkit-scrollbar{ display: none; }
+.beyond-nav a{
+  font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--text-2); text-decoration: none; white-space: nowrap;
+  padding: 9px 4px; letter-spacing: .17em; border-bottom: 0;
+  transition: color .25s var(--ease), border-color .25s var(--ease);
+}
+.beyond-nav a:hover, .beyond-nav a.active{ color: var(--text); border-color: var(--mark); }
+.beyond-main{ max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad) 40px; }
+.verse-section{ padding: clamp(48px, 8vh, 84px) 0 0; }
+.verse-section > h2, .verse-section > h3{
+  font-size: clamp(26px, 3.6vw, 42px); letter-spacing: -.02em; color: var(--text);
+  display: flex; align-items: baseline; gap: 18px;
+}
+.verse-section > h2::after, .verse-section > h3::after{ content: ""; flex: 1; height: 1px; background: var(--line); }
+.beyond-card-eyebrow{ display: block; color: var(--text-2); margin: 0 0 10px; }
+.beyond-card-eyebrow::before{ content: none; color: var(--mark); }
+.verse-grid{
+  display: grid; gap: 24px; margin-top: 30px;
+  grid-template-columns: repeat(3, 1fr);
+}
+.verse-card{
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg-2);
+  cursor: pointer;
+  transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.verse-card.hv{
+  transform: translateY(-5px);
+  border-color: rgba(237, 235, 228, .38);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, .5);
+}
+.verse-card img{
+  width: 100%; height: 100%; object-fit: cover;
+  filter: saturate(.92) contrast(1.02);
+  transition: transform .6s var(--ease), opacity .4s var(--ease);
+}
+.verse-card.hv img{ transform: scale(1.07); filter: saturate(1.06) contrast(1.05); }
+.verse-card::before{
+  /* index chip REMOVED per user */
+  content: none; display: none;
+}
+.verse-card::after{
+  /* hover vignette photo pe soft shadow depth, naam ke peeche */
+  content: ""; position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(rgba(10, 9, 8, .34), rgba(10, 9, 8, .34)), radial-gradient(120% 95% at 50% 55%, rgba(10, 9, 8, .5), rgba(10, 9, 8, 0) 74%);
+  opacity: 0; transition: opacity .35s var(--ease);
+  pointer-events: none;
+}
+.verse-card.hv::after, .verse-card:focus-visible::after{ opacity: 1; }
+.verse-card-name{
+  position: absolute; inset: 0; z-index: 3;
+  display: grid; place-items: center; padding: 16px;
+  text-align: center;
+  font-family: var(--serif); font-style: italic; font-weight: 500;
+  font-size: 19px; line-height: 1.35; letter-spacing: .01em;
+  color: #F4F1EA; text-shadow: 0 2px 16px rgba(0, 0, 0, .7);
+  opacity: 0; transform: translateY(8px) scale(.97);
+  transition: opacity .35s var(--ease), transform .35s var(--ease);
+  transition-delay: 0s;
+  pointer-events: none;
+}
+.verse-card.hv .verse-card-name,
+.verse-card:focus-visible .verse-card-name{
+  opacity: 1; transform: none;
+  transition-delay: 0s; /* delay hataya turant */
+}
+.verse-card.no-image{ display: grid; place-items: center; }
+.verse-card.no-image::before{ position: static; width: 44px; height: 44px; font-size: 17px; margin-bottom: 12px; color: var(--mark-ink); background: transparent; }
+.verse-card.no-image img{ display: none; }
+.verse-card.no-image::after{ display: block; }
+.verse-card.no-image .verse-card-name{ position: relative; z-index: 3; }
+/* hobbies on beyond */
+.thank-you{
+  max-width: var(--wrap); margin: 0 auto;
+  padding: clamp(70px, 12vh, 130px) var(--pad);
+  text-align: center; border-top: 1px solid var(--line); margin-top: clamp(56px, 9vh, 96px);
+}
+.thank-eyebrow{ color: var(--text-2); display: block; margin-bottom: 18px; }
+.thank-eyebrow::before{ content: none; color: var(--mark); }
+.thank-you h2{ font-size: clamp(28px, 4.6vw, 54px); font-style: italic; font-weight: 400; max-width: 22ch; margin: 0 auto; }
+.thank-you .section-context{ margin: 0 auto; text-align: center; }
+.verse-quote{ display: block; margin-top: 20px; color: var(--text-2); font-family: var(--serif); font-style: italic; font-size: 16px; }
+/* ── 9 · VERSE DETAIL OVERLAY (THEME-AWARE) ─────────────────────── */
+.verse-detail{
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--ov-bg); color: var(--ov-text);
+  opacity: 0; transition: opacity .45s var(--ease);
+  overflow: hidden;
+}
+.verse-detail.is-open{ opacity: 1; }
+.verse-detail[hidden]{ display: none; }
+.verse-trailer-bg{ position: absolute; inset: 0; z-index: 0; }
+.verse-trailer-video{
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; transform: translateZ(0);
+}
+.verse-trailer-still{
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  filter: blur(14px) saturate(.9); transform: scale(1.08);
+}
+.verse-trailer-scrim{
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, .92) 0%, rgba(10, 9, 8, .35) 34%, rgba(10, 9, 8, .12) 60%, rgba(10, 9, 8, .35) 100%);
+}
+.verse-detail.cinematic-in .verse-trailer-bg{ animation: vIn 1s var(--ease) both; }
+@keyframes vIn{ from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
+.verse-detail-media{ position: absolute; inset: 0; z-index: 0; }
+.verse-detail-media img{ width: 100%; height: 100%; object-fit: cover; opacity: .5; filter: blur(10px) saturate(.85); transform: scale(1.06); }
+.verse-detail.no-detail-image .verse-detail-media{ display: none; }
+.verse-detail-text{
+  position: absolute; z-index: 4; left: clamp(22px, 5vw, 74px); bottom: clamp(84px, 14vh, 130px);
+  max-width: 620px;
+}
+.verse-detail.cinematic-in .verse-detail-text{ animation: vText .7s var(--ease) .25s both; }
+@keyframes vText{ from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.verse-detail-tag{ color: var(--ov-mark); display: block; margin-bottom: 14px; }
+.verse-detail-tag::before{ content: none; }
+.verse-detail-text h4{
+  color: var(--ov-text); font-size: clamp(32px, 5.4vw, 64px);
+  font-style: italic; font-weight: 400; letter-spacing: -.02em;
+}
+.verse-detail-text p{ margin-top: 14px; color: var(--ov-text-2); font-size: clamp(13.5px, 1.4vw, 16px); max-width: 54ch; }
+.verse-close{
+  position: absolute; top: clamp(16px, 3vh, 28px); right: clamp(16px, 3vw, 30px); z-index: 8;
+  width: 46px; height: 46px; display: grid; place-items: center;
+  background: transparent; border: 1px solid var(--ov-line); border-radius: 999px;
+  color: var(--ov-text); font-size: 15px; cursor: pointer;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.verse-close:hover{ background: var(--ov-text); color: var(--bg); border-color: var(--ov-text); }
+.verse-navigation{
+  position: absolute; z-index: 6; inset: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 34px); pointer-events: none;
+}
+.verse-prev span, .verse-next span{ display: none; }
+.verse-prev, .verse-next{
+  pointer-events: auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 999px;
+  background: var(--ov-btn, rgba(23, 22, 19, .62)); color: var(--ov-text);
+  border: 1px solid var(--ov-line); cursor: pointer;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  font-size: 0; letter-spacing: 0; text-transform: none;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), opacity .2s var(--ease);
+}
+.verse-prev:hover, .verse-next:hover{ color: var(--ov-text); border-color: var(--ov-mark); }
+.verse-prev:disabled, .verse-next:disabled{ opacity: .28; pointer-events: none; }
+.verse-prev svg, .verse-next svg{ width: 15px; height: 15px; }
+.verse-detail.at-start .verse-prev, .verse-detail.at-end .verse-next{ visibility: hidden; }
+/* ── 10 · MUSIC PLAYER (theme-aware bar) ────────────────────────── */
+/* verse-card-open player ab theme-aware (hardcoded dark removed) */
+@media (max-width: 720px){
+
+
+}
+@media (max-width: 480px){
+
+
+}
+/* keep page content clear of the fixed player */
+/* ── 11 · PERFORMANCE GUARDS (overlay open → no expensive paint) ── */
+body:has(.verse-detail.is-open) .verse-close{
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+body:has(.verse-detail.is-open) .verse-trailer-video{ transform: translateZ(0); will-change: transform; }
+/* ── 12 · SMALL SCREENS ─────────────────────────────────────────── */
+@media (max-width: 1100px){
+.site-header::before{ display: none; }
+.main-nav{ padding: 6px var(--pad); }
+.main-nav > a:first-of-type{ margin-left: 0; }
+
+}
+@media (max-width: 860px){
+.site-header::before{ display: none; }
+.main-nav{ justify-content: flex-start; padding: 6px var(--pad); }
+.verse-detail-text{ bottom: 110px; left: 20px; right: 20px; }
+.verse-navigation{ padding: 0 20px; }
+
+}
+@media (max-width: 560px){
+.verse-grid{ grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.hobbies-grid{ grid-template-columns: 1fr; }
+.verse-card-name{ font-size: 14px; left: 10px; right: 10px; bottom: 9px; }
+.courses-grid, .skills-grid, .internships-grid, .soft-skills-grid{ grid-template-columns: 1fr; }
+
+}
+/* ── 13 · MOTION LAYER staggered reveals, masks, marquee, parallax ── */
+/* scroll progress hairline */
+.scroll-progress{
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 80;
+  background: transparent; pointer-events: none;
+}
+.scroll-progress::before{
+  content: ""; display: block; height: 100%; width: 100%;
+  background: var(--mark);
+  transform: scaleX(var(--sp, 0)); transform-origin: left;
+}
+/* word-mask reveal (kinetic type) */
+.w-split{ display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; }
+.w-split .w-in{
+  display: inline-block;
+  transform: translateY(115%);
+  transition: transform .9s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.in .w-split .w-in, .w-split.in .w-in{ transform: none; }
+/* line-mask reveal for section headings */
+.mask-line{ display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.mask-line > span{
+  display: block; transform: translateY(105%);
+  transition: transform .85s var(--ease) .05s;
+}
+.in .mask-line > span, .mask-line.in > span{ transform: none; }
+/* marker sweep draws itself when hero lands */
+#welcomeName .w-in{ will-change: transform; }
+.sweep-draw{
+  background-image: linear-gradient(var(--mark), var(--mark));
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 0% 2px;
+  padding-bottom: 6px;
+  transition: background-size 1s var(--ease) .75s;
+}
+.in .sweep-draw, .sweep-draw.in{ background-size: 100% 2px; }
+/* staggered children (cards, rows, meta) */
+.stagger > *{
+  opacity: 0; transform: translateY(22px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.stagger.in > *{ opacity: 1; transform: none; }
+/* hero entrance choreography (page load) */
+@keyframes riseIn{ from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes dropIn{ from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: none; } }
+.site-header{ animation: dropIn .7s var(--ease) both; }
+.welcome-eyebrow{ animation: riseIn .8s var(--ease) .15s both; }
+.welcome-subtitle{ animation: riseIn .8s var(--ease) .9s both; }
+.welcome-cta{ animation: riseIn .8s var(--ease) 1.05s both; }
+.welcome-meta div{ animation: riseIn .7s var(--ease) both; }
+.welcome-meta div:nth-child(1){ animation-delay: 1.15s; }
+.welcome-meta div:nth-child(2){ animation-delay: 1.25s; }
+.welcome-meta div:nth-child(3){ animation-delay: 1.35s; }
+.welcome-meta div:nth-child(4){ animation-delay: 1.45s; }
+.beyond-eyebrow{ animation: riseIn .8s var(--ease) .1s both; }
+.beyond-hero p{ animation: contextPop .8s cubic-bezier(.22,.84,.3,1) .8s both; }
+/* marquee ticker */
+.marquee{
+  overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 12px 0; user-select: none;
+}
+.marquee-track{
+  display: flex; gap: 0; width: max-content;
+  animation: marquee 34s linear infinite;
+}
+.marquee:hover .marquee-track{ animation-play-state: paused; }
+.marquee-track span{
+  font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--text-3); white-space: nowrap; padding-right: .6em;
+}
+.marquee-track em{ font-style: normal; color: var(--mark-ink); padding-right: .6em; }
+.marquee-track em{ color: var(--mark-ink); }
+@keyframes marquee{ from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* micro-interactions: chip fill sweep, arrow slide, card scrim sweep */
+.contact-link{ position: relative; overflow: hidden; z-index: 0; }
+.contact-link::before{
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: var(--mark); transform: translateY(101%);
+  transition: transform .3s var(--ease);
+}
+.contact-link.hv::before{ transform: none; }
+.skill-card .skill-arrow svg{ transition: transform .3s var(--ease); }
+.skill-card.hv .skill-arrow svg{ transform: translateX(3px); }
+.verse-card .verse-card-name{ transition: transform .35s var(--ease); }
+.verse-card.hv .verse-card-name{ transform: translateY(-3px); }
+/* gentle parallax hooks (JS sets --py) */
+[data-parallax]{ transform: translateY(var(--py, 0px)); will-change: transform; }
+/* beyond hero title slow drift-in */
+@keyframes heroDrift{ from { opacity: 0; transform: translateY(34px) scale(.985); } to { opacity: 1; transform: none; } }
+.beyond-hero h1{ animation: heroDrift 1s var(--ease) .2s both; }
+.beyond-hero h1.ul-draw{
+  animation:
+    heroDrift 1s var(--ease) .2s both,
+    mkaUnderlineDraw .85s var(--ease) .3s forwards;
+}
+/* overlay text stagger upgrade */
+.verse-detail.cinematic-in .verse-detail-tag{ animation: vText .6s var(--ease) .18s both; }
+.verse-detail.cinematic-in .verse-detail-text p{ animation: vText .7s var(--ease) .4s both; }
+/* reduced motion: sab static */
+@media (prefers-reduced-motion: reduce){
+.marquee-track{ animation: none; }
+.w-split .w-in, .mask-line > span, .stagger > *{ transform: none; opacity: 1; transition: none; }
+.sweep-draw{ background-size: 100% 2px; transition: none; }
+.site-header, .welcome-eyebrow, .welcome-subtitle, .welcome-cta, .welcome-meta div,
+  .beyond-eyebrow, .beyond-hero p, .beyond-hero h1, .beyond-hero h1.ul-draw{ animation: none; }
+.beyond-hero h1, .beyond-hero h1.ul-draw{ background-size: 100% 2px; }
+[data-parallax]{ transform: none; }
+
+}
+/* ── 14 · THEME TOGGLE ──────────────────────────────────────────── */
+.theme-toggle{
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  background: transparent; color: var(--text-2);
+  border: 1px solid var(--line); border-radius: 999px;
+  font-family: var(--sans); font-size: 10.5px; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 8px 14px; margin-left: 8px; cursor: pointer;
+  transition: color .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
+}
+.theme-toggle:hover{ color: var(--text); border-color: var(--text); }
+.theme-toggle .tt-ico{ width: 13px; height: 13px; flex: none; }
+.theme-toggle .tt-sun{ display: none; }
+.theme-toggle .tt-moon{ display: block; }
+:root[data-theme="dark"] .theme-toggle .tt-sun{ display: block; }
+:root[data-theme="dark"] .theme-toggle .tt-moon{ display: none; }
+@media (max-width: 1280px){
+.theme-toggle .tt-label{ display: none; }
+.theme-toggle{ padding: 8px 10px; }
+
+}
+@media (max-width: 860px){
+.theme-toggle .tt-label{ display: none; }
+.theme-toggle{ padding: 8px 10px; }
+
+}
+/* ── 15 · REFINEMENTS (20-point polish pass) ───────────────────── */
+/* glow tokens per theme */
+:root{ --glow: rgba(22, 41, 77, .16); --player-bg: rgba(251, 249, 244, .68); }
+:root[data-theme="dark"]{ --glow: rgba(255, 59, 82, .2); --player-bg: rgba(23, 22, 19, .62); }
+/* 1 · theme toggle fixed floating, kabhi nahi chhutta */
+.theme-toggle.float{
+  position: fixed; top: calc(var(--bar-h) + 16px); right: 18px; bottom: auto; z-index: 95;
+  width: 50px; height: 50px; padding: 0; justify-content: center; margin: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px var(--shadow), 0 2px 0 var(--line-soft) inset;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.theme-toggle.float:hover{
+  transform: translateY(-3px);
+  border-color: var(--mark-ink);
+  box-shadow: 0 14px 36px var(--shadow), 0 6px 22px var(--glow);
+}
+.theme-toggle.float .tt-ico{ width: 17px; height: 17px; }
+.theme-toggle.float .tt-label{ display: none; }
+.beyond-page .skill-overlay-close{ right: auto; left: 22px; }
+/* back button ab left me */
+/* 3+5 · ABOUT premium drop cap, lang bars */
+.hero-right > p:first-child::first-letter{
+  font-family: var(--serif); font-weight: 560; font-size: 52px; line-height: .82;
+  float: left; padding: 6px 10px 0 0; color: var(--mark-ink);
+}
+.hero-right > p{ font-size: 15.5px; line-height: 1.85; }
+.hero-right > p + p{ margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line-soft); }
+.lang-list{ list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 12px; }
+.lang-list li{ display: grid; grid-template-columns: 88px 1fr auto; align-items: center; gap: 14px; }
+.lang-name{ display: block; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-2); }
+.lang-bar{ display: block; position: relative; height: 3px; background: var(--line-soft); border-radius: 3px; overflow: hidden; }
+.lang-bar i{ position: absolute; inset: 0 auto 0 0; background: var(--mark-ink); border-radius: 3px; transition: width 1.2s var(--ease) .3s; }
+.lang-level{ font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--text-3); text-transform: uppercase; }
+.skill-detail-page .lang-bar, .skill-detail-page .lang-name{ display: none; }
+/* 4 · contact links 5 rows × 2 columns */
+.contact-links{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.contact-link{ text-align: center; border-radius: 4px; padding: 10px 12px; }
+@media (max-width: 560px){
+.contact-links{ grid-template-columns: 1fr; }
+
+}
+/* 6 · JOURNEY premium map-feel timeline */
+.journey-timeline::before{ background: repeating-linear-gradient(to bottom, var(--line) 0 6px, transparent 6px 12px); width: 2px; left: 6px; }
+.journey-dot{ border-color: var(--mark-ink); background: var(--bg); width: 13px; height: 13px; }
+.journey-item.hv .journey-dot{ background: var(--mark); border-color: var(--mark); box-shadow: 0 0 0 5px var(--glow); }
+.journey-content{
+  display: grid; grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
+  grid-template-areas: "head head" "photo text";
+  gap: 20px 40px; align-items: start;
+}
+.journey-head{ grid-area: head; }
+.journey-head h3{ margin-bottom: 8px; }
+.journey-photo-link{ grid-area: photo; }
+.journey-contents{ grid-area: text; display: flex; flex-direction: column; gap: 14px; min-width: 0; padding-top: 2px; }
+.journey-content h3{ font-size: clamp(21px, 2.6vw, 28px); letter-spacing: -.015em; }
+.journey-date{
+  display: inline-block; margin: 10px 0 12px; padding: 5px 12px;
+  border: 1px solid var(--line); border-radius: 999px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; color: var(--text-2);
+}
+.journey-photo-link{ margin-top: 0; width: 100%; border-radius: 6px; border: 1px solid var(--line); }
+.journey-photo{ width: 100%; height: 230px; border-radius: 5px; }
+.journey-photo-link{
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+}
+.journey-photo-link.hv{
+  transform: translateY(-7px) scale(1.015);
+  border-color: var(--mark-ink);
+  box-shadow: 0 0 0 1px var(--mark-ink), 0 30px 70px var(--glow), 0 16px 40px var(--shadow);
+}
+@media (max-width: 860px){
+.journey-content{ grid-template-columns: 1fr; }
+.journey-photo{ height: 200px; }
+
+}
+/* 7 · SKILLS fixed 3×3, no title line, glow hover */
+.skills-title-line{ display: none; }
+#skills .skills-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.skill-card.hv, .course-card.hv{
+  transform: translateY(-5px);
+  border-color: var(--mark);
+  box-shadow: 0 22px 48px var(--shadow), 0 8px 28px var(--glow);
+}
+.skill-card.hv .skill-arrow{ background: #FFFFFF; border-color: #FFFFFF; color: var(--mark); }
+@media (max-width: 900px){
+#skills .skills-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+}
+@media (max-width: 620px){
+#skills .skills-grid{ grid-template-columns: 1fr; }
+
+}
+/* 8 · COURSES aligned heads + content, glow hover */
+.courses-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.course-card{ display: flex; flex-direction: column; }
+.course-card h3{ font-size: 19px; min-height: 2.4em; }
+.course-card p{ flex: 1; }
+@media (max-width: 900px){
+.courses-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+}
+@media (max-width: 620px){
+.courses-grid{ grid-template-columns: 1fr; }
+
+}
+/* 9 · INTERNSHIPS fixed 2×2, everything aligned */
+.internships-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.internships-grid .course-card{ display: flex; flex-direction: column; }
+.internships-grid h3{ font-size: 19px; min-height: 2.4em; }
+.internships-grid p{ flex: 1; }
+/* Courses + Internships: certificate/post link ka ek hi design.
+   Hover (mouse) par navy/cherry fill andar se aata hai; phone par sirf ungli
+   link par rakhne par (:active) — uthte hi chala jata hai. */
+.course-link, .internship-link{
+  display: inline-block; align-self: flex-start; margin-top: 18px;
+  padding: 9px 12px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--mark-ink); text-decoration: none;
+  border: 1px solid var(--mark-ink);
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat 0 0 / 0% 100%;
+  transition: color .3s var(--ease), border-color .3s var(--ease), background-size .4s var(--ease);
+}
+.course-link::after, .internship-link::after{ content: " ↗"; }
+@media (hover: hover) and (pointer: fine){
+  .course-link:hover, .internship-link:hover{
+    color: var(--bg); border-color: var(--mark); background-size: 100% 100%;
+  }
+}
+.course-link:active, .internship-link:active{
+  color: var(--bg); border-color: var(--mark); background-size: 100% 100%;
+}
+.course-link:focus-visible, .internship-link:focus-visible{ outline: 2px solid var(--mark); outline-offset: 4px; }
+/* Card hover par card navy ho jata hai (.skill-card.hv) — uske andar link white, hover par white fill + navy text */
+.course-card.hv .course-link, .course-card.hv .internship-link{ color: #FFFFFF; border-color: #FFFFFF; background-image: linear-gradient(#FFFFFF, #FFFFFF); }
+.course-card.hv .course-link:hover, .course-card.hv .internship-link:hover,
+.course-card.hv .course-link:active, .course-card.hv .internship-link:active{ color: var(--mark); }
+/* Courses + Internships: dono 2×2 matrix, cards ki height barabar, link box ek hi line par */
+#courses .courses-grid, #internships .internships-grid{
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 22px; align-items: stretch;
+}
+#courses .course-card, #internships .course-card{ display: flex; flex-direction: column; height: 100%; align-items: stretch; justify-content: flex-start; }
+#courses .course-card .skill-card-content, #internships .course-card .skill-card-content{ display: flex; flex-direction: column; height: 100%; width: 100%; align-self: stretch; }
+#courses .course-card p, #internships .course-card p{ flex: 1; margin-bottom: 18px; }
+#courses .course-link, #internships .internship-link{ margin-top: 0; }
+@media (max-width: 620px){
+  #courses .courses-grid, #internships .internships-grid{ grid-template-columns: 1fr !important; }
+}
+@media (max-width: 620px){
+.internships-grid{ grid-template-columns: 1fr; }
+
+}
+/* 10+12 · empty states premium placeholders */
+.placeholder-note{
+  display: block; padding: 46px 30px; text-align: center;
+  border: 1px dashed var(--line); border-radius: 6px;
+  font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--text-2);
+}
+.placeholder-note::before{ content: none; color: var(--mark-ink); }
+.placeholder-note::after{ content: none; color: var(--mark-ink); }
+/* 11 · SOFT SKILLS fixed 3×3, no ink border on hover */
+.soft-skills-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.soft-skills-grid .skill-card{ display: block; transition: none; }
+.soft-skills-grid .skill-card.hv{
+  transform: none; box-shadow: none; border-color: var(--line);
+  background: var(--surface) !important;
+}
+.soft-skills-grid .skill-card.hv h3,
+.soft-skills-grid .skill-card.hv .skill-card-content,
+.soft-skills-grid .skill-card.hv p{ color: var(--text); }
+.soft-skills-grid .skill-card.hv p{ color: var(--text-2); }
+.skill-card-content h3{ font-size: 19px; margin-bottom: 8px; }
+.skill-card-content p{ color: var(--text-2); font-size: 14px; }
+@media (max-width: 900px){
+.soft-skills-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+}
+@media (max-width: 620px){
+.soft-skills-grid{ grid-template-columns: 1fr; }
+
+}
+/* 13+18 · BEYOND button compact, separated */
+.verse-card-wrapper{
+  max-width: var(--wrap); margin: 0 auto; padding: clamp(40px, 7vh, 72px) var(--pad) clamp(56px, 9vh, 96px);
+  border-top: 1px solid var(--line);
+}
+.beyond-verse-card{
+  max-width: 640px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  padding: 26px 30px;
+}
+.beyond-verse-card h3{ font-size: 24px; font-style: italic; }
+.beyond-verse-card p{ color: var(--text-2); font-size: 13.5px; margin-top: 4px; }
+.beyond-card-eyebrow{ display: block; margin-bottom: 8px; color: var(--text-3); }
+.beyond-card-eyebrow::before{ content: none; color: var(--mark-ink); }
+/* 14 · FOOTER editorial three-act */
+.site-footer{ background: var(--footer-bg); color: var(--footer-text); }
+.site-footer-inner{
+  max-width: var(--wrap); margin: 0 auto;
+  padding: clamp(44px, 7vh, 72px) var(--pad) clamp(40px, 6vh, 60px);
+  display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+}
+.footer-top{
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 26px; flex-wrap: wrap;
+  padding-bottom: 34px; border-bottom: 1px solid var(--footer-line);
+}
+.footer-big{ font-family: var(--serif); font-size: clamp(26px, 4.4vw, 50px); line-height: 1.12; letter-spacing: -.02em; max-width: 22ch; }
+.footer-big em{ color: var(--mark); }
+.footer-cta{
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--footer-text); text-decoration: none;
+  border: 1px solid var(--footer-line); border-radius: 999px; padding: 12px 20px;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.footer-cta:hover{ background: var(--mark); border-color: var(--mark); color: #171512; }
+.footer-cols{
+  display: grid; grid-template-columns: 1.2fr 1fr .8fr; gap: 30px;
+  padding: 30px 0;
+}
+.footer-nav{ display: flex; flex-direction: column; gap: 9px; }
+.footer-nav a{
+  color: var(--footer-text-2); text-decoration: none;
+  font-size: 11px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase;
+  transition: color .2s var(--ease);
+}
+.footer-nav a:hover{ color: var(--mark); }
+.footer-ed{ display: flex; flex-direction: column; gap: 6px; justify-content: flex-end; }
+.footer-ed span{ font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--footer-text-2); text-transform: uppercase; }
+.footer-bottom{
+  display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  border-top: 1px solid var(--footer-line); padding-top: 20px;
+  font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--footer-text-2);
+}
+@media (max-width: 860px){
+.footer-cols{ grid-template-columns: 1fr; gap: 22px; }
+
+}
+/* 15 · MUSIC PLAYER floating translucent bar */
+/* verse-card-open dark override REMOVED player theme-aware rehta hai */
+/* repeat/pressed vs hover alag alag, taaki unpress turant white ho */
+/* catalog: art box left + playing highlight + eq bars right */
+/* 16 · NAV spacing + phone friendly */
+.main-nav a{ padding: 8px 2px; flex: 1 0 auto; text-align: center; white-space: nowrap; }
+@media (max-width: 860px){
+.main-nav{ position: sticky; top: 0; }
+.main-nav a{ font-size: 10.5px; letter-spacing: .12em; }
+
+}
+/* 19 · WELCOME premium entrance: blur-rise words + scroll cue */
+.w-split .w-in{ filter: blur(10px); opacity: 0; transition: transform .95s var(--ease), filter .8s var(--ease), opacity .6s var(--ease); }
+.in .w-split .w-in, .w-split.in .w-in{ filter: blur(0); opacity: 1; }
+.welcome::after{
+  content: ""; position: absolute; left: 50%; bottom: calc(var(--player-h) + 26px);
+  width: 1px; height: 54px; background: linear-gradient(var(--text-3), transparent);
+  animation: cueDrop 2.4s var(--ease) 1.6s infinite;
+  opacity: 0;
+}
+@keyframes cueDrop{
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  35% { transform: scaleY(1); opacity: .8; }
+  75% { transform: scaleY(1); opacity: 0; }
+  100% { opacity: 0; }
+}
+/* reduced motion: naye effects bhi static */
+@media (prefers-reduced-motion: reduce){
+.welcome::after{ display: none; }
+.w-split .w-in{ filter: none; opacity: 1; }
+
+}
+/* journey missing photo graceful placeholder */
+.journey-photo-link.no-photo{ display: grid; place-items: center; min-height: 200px; background: var(--bg-2); }
+.journey-photo-link.no-photo img{ display: none; }
+.journey-photo-link.no-photo::before{
+  content: "photo arriving soon";
+  font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text-3);
+}
+/* ── 16 · PHONE RESPONSIVE SWEEP ───────────────────────────────── */
+html, body{ overflow-x: hidden; overflow-x: clip; }
+@media (max-width: 820px){
+.theme-toggle.float{ bottom: calc(var(--player-h) + 26px); right: 14px; }
+
+}
+@media (max-width: 620px){
+.welcome{ padding-top: clamp(40px, 7vh, 70px); }
+.welcome-name{ font-size: clamp(40px, 11.5vw, 96px); }
+#welcomeGreeting{ font-size: 17px; }
+.welcome-subtitle{ font-size: 14.5px; }
+.showcase-section{ padding: clamp(48px, 8vh, 80px) var(--pad); }
+.section-title, .skills-header .section-title{ font-size: clamp(26px, 8vw, 40px); }
+.lang-list li{ grid-template-columns: 68px 1fr auto; gap: 10px; }
+.lang-level{ font-size: 9px; }
+.hero-right > p:first-child::first-letter{ font-size: 42px; }
+.journey-date{ font-size: 9.5px; padding: 4px 10px; }
+.journey-photo{ height: 180px; }
+.beyond-verse-card{ padding: 20px 22px; }
+.beyond-verse-card h3{ font-size: 20px; }
+.footer-top{ flex-direction: column; align-items: flex-start; gap: 18px; }
+.footer-big{ font-size: clamp(24px, 7.5vw, 34px); }
+.footer-bottom{ flex-direction: column; gap: 6px; }
+.skill-overlay{ padding: 0; }
+.skill-overlay-frame{ border-radius: 0; border: 0; max-width: 100%; }
+#skillOverlayClose{ top: 10px; right: 10px; }
+.verse-detail-text{ left: 18px; right: 18px; bottom: 96px; }
+.verse-detail-text h4{ font-size: clamp(26px, 8vw, 40px); }
+.verse-navigation{ padding: 0 18px; }
+.beyond-hero{ padding-top: clamp(56px, 10vh, 100px); }
+.beyond-hero h1{ font-size: clamp(38px, 10vw, 60px); }
+.marquee-track span{ font-size: 10px; }
+.main-nav{ gap: 18px; }
+
+}
+@media (max-width: 400px){
+.welcome-name{ font-size: clamp(34px, 10.5vw, 60px); }
+.contact-link{ padding: 9px 10px; font-size: 10px; }
+
+}
+/* reveal settle hone ke baad hover bilkul instant (delay 0) */
+.stagger.settled > *{
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
+  transition-delay: 0ms;
+}
+/* §17 journey editorial text (relaxed, premium) */
+.journey-role{
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 10.5px; font-weight: 600;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--mark-ink);
+}
+.journey-role::before{ content: ""; width: 20px; height: 1px; background: var(--mark-ink); flex: none; }
+.journey-text{
+  font-family: var(--serif); font-size: 16.5px; font-weight: 400;
+  line-height: 1.9; letter-spacing: .012em; color: var(--text-2);
+  max-width: 58ch;
+}
+.journey-points{ list-style: none; display: flex; flex-direction: column; gap: 9px; margin: 6px 0 0; padding: 0; }
+.journey-points li{
+  position: relative; padding-left: 0;
+  font-family: var(--sans); font-size: 13.5px; line-height: 1.65; color: var(--text-3);
+}
+.journey-points li::before{ content: none; position: absolute; left: 0; color: var(--mark-ink); }
+@media (max-width: 860px){
+.journey-content{ grid-template-columns: 1fr; grid-template-areas: "head" "photo" "text"; gap: 18px; }
+.journey-text{ font-size: 15.5px; line-height: 1.8; }
+
+}
+/* embedded (iframe) beyond player sirf parent me, double music nahi */
+/* overlay open ho to parent ke controls chhupo embedded page ke apne hain */
+body.skill-overlay-open .theme-toggle.float,
+body.skill-overlay-open > .theme-toggle{ display: none; }
+#skillOverlayClose{ display: none; }
+/* har embedded page ka apna back button hai */
+/* ── 18 · BEYOND PREMIUM PASS ─────────────────────────────────── */
+/* nav: top pe, poori screen me evenly */
+.beyond-nav-inner{
+  max-width: none; justify-content: space-between;
+  padding: 0 clamp(16px, 3vw, 44px);
+}
+.beyond-nav-inner a{ flex: 1 0 auto; text-align: center; position: relative; border-bottom: 0; }
+.beyond-nav a::after{
+  content: ""; position: absolute; left: 2px; right: 2px; bottom: 3px; height: 2px;
+  background: var(--mark); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .34s var(--ease);
+}
+.beyond-nav a:hover::after, .beyond-nav a.active::after{ transform: scaleX(1); }
+.beyond-nav a:hover, .beyond-nav a.active{ color: var(--text); border-color: transparent; }
+/* welcome hero main page welcome jaisa */
+.beyond-hero{
+  min-height: calc(100vh - 54px);
+  display: flex; align-items: center;
+  padding: clamp(40px, 8vh, 90px) var(--pad);
+}
+.beyond-hero-content{ width: 100%; }
+.beyond-eyebrow{ animation: riseIn .8s var(--ease) .1s both; }
+.beyond-hero h1{
+  font-size: clamp(44px, 9vw, 118px);
+  line-height: 1.04; letter-spacing: -.03em;
+  margin: 18px 0 24px; position: relative; display: inline-block; z-index: 0;
+}
+/* MOTA underline HATA DIYA sirf patli 2px wali rahegi */
+.beyond-hero h1::after{ content: none; display: none; }
+.beyond-subtitle{
+  font-family: var(--serif); font-size: clamp(15px, 1.6vw, 18px); line-height: 1.85;
+  color: var(--text-2); max-width: 56ch;
+  animation: contextPop .8s cubic-bezier(.22,.84,.3,1) .5s both;
+}
+.beyond-cta{
+  display: inline-block; margin-top: 30px; margin-left: -12px;
+  padding: 10px 12px 10px;
+  font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; border: 1px solid var(--text);
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat 0 0 / 0% 100%;
+  animation: riseIn .7s var(--ease) .7s both;
+  transition: color .3s var(--ease), border-color .3s var(--ease), background-size .4s var(--ease);
+}
+@media (hover: hover) and (pointer: fine){
+  .beyond-cta:hover{ color: var(--bg); border-color: var(--mark); background-size: 100% 100%; }
+}
+.beyond-cta.hv,
+.beyond-cta:focus-visible{
+  color: var(--bg); border-color: var(--mark);
+  background-size: 100% 100%;
+}
+.beyond-cta:focus-visible{ outline: 2px solid var(--mark); outline-offset: 4px; }
+@media (prefers-reduced-motion: reduce){
+  .beyond-cta{ transition: none; }
+}
+/* X button nav ke NICHE */
+.beyond-page .skill-overlay-close,
+.beyond-page .theme-toggle.float{ top: 66px; width: 44px; height: 44px; }
+.beyond-page .skill-overlay-close{ left: 22px; }
+.beyond-page .theme-toggle.float{ right: 22px; }
+.beyond-page .theme-toggle.float .tt-ico{ width: 16px; height: 16px; }
+/* sections: side-line hatao, partition line lagao */
+.verse-section > h2::after, .verse-section > h3::after{ display: none; }
+.verse-section{ padding: 0; }
+.beyond-main{ padding-top: clamp(30px, 5vh, 54px); }
+.verse-section + .verse-section{
+  border-top: 1px solid var(--line);
+  margin-top: clamp(44px, 8vh, 76px);
+  padding-top: clamp(44px, 8vh, 76px);
+}
+/* cards chhote poora section ek screen me */
+.verse-grid{ gap: 26px; margin-top: 22px; }
+.verse-card{ aspect-ratio: 3 / 4; height: auto; max-height: 560px; }
+.verse-card.hv{
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--mark);
+  box-shadow: 0 20px 48px var(--glow), 0 10px 26px rgba(0, 0, 0, .22);
+}
+/* edge next/prev buttons */
+.verse-edge-btn{
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 34px; height: 34px; border-radius: 999px;
+  display: grid; place-items: center;
+  background: rgba(16, 15, 13, .55); color: #EDEBE4;
+  border: 1px solid rgba(237, 235, 228, .28);
+  font-size: 19px; line-height: 1; cursor: pointer;
+  opacity: 0; transition: opacity .25s var(--ease), background .2s, color .2s;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.verse-edge-btn.prev{ left: 8px; }
+.verse-edge-btn.next{ right: 8px; }
+.verse-card.hv .verse-edge-btn, .verse-edge-btn:focus-visible{ opacity: 1; }
+.verse-edge-btn:hover{ background: var(--mark); color: #100F0D; border-color: var(--mark); }
+.verse-card.no-image .verse-edge-btn{ background: var(--surface); color: var(--text); border-color: var(--line); }
+/* hobbies: koi hover effect nahi */
+.hobby-card{ transition: none; }
+.hobby-card:hover{ transform: none; box-shadow: none; border-color: var(--line); }
+.hobby-card:hover .hobby-bg{ transform: none; }
+/* font polish */
+/* name styling ab base rule me (serif italic centered) */
+/* music bar overlay ke UPAR beyond me bhi dikhta rahe */
+body.skill-overlay-open{ overflow: hidden; }
+/* phone */
+@media (max-width: 620px){
+.beyond-nav-inner{ justify-content: flex-start; }
+.beyond-nav-inner a{ flex: none; }
+.beyond-hero{ min-height: calc(86vh - 54px); }
+.verse-card{ height: auto; }
+
+}
+/* trailer nav hover + disabled */
+.verse-prev:hover, .verse-next:hover{ background: var(--mark); color: #100F0D; border-color: var(--mark); }
+.verse-prev:disabled, .verse-next:disabled{ opacity: 0; pointer-events: none; }
+/* premium scrollbar (dono themes) */
+html{ scrollbar-width: auto; scrollbar-color: var(--mark) var(--bg-2); }
+::-webkit-scrollbar{ width: 14px; height: 14px; }
+::-webkit-scrollbar-track{ background: var(--bg-2); }
+::-webkit-scrollbar-thumb{
+  background: var(--mark); border-radius: 8px; border: 3px solid var(--bg-2);
+  min-height: 70px;
+}
+::-webkit-scrollbar-thumb:hover{ background: var(--mark-ink); }
+::-webkit-scrollbar-thumb:active{ background: var(--mark-ink); }
+/* overlay open: html-level scroll lock + scrollbar gutter stable */
+html.overlay-lock{ overflow: hidden; scrollbar-gutter: auto; }
+/* gutter band hatao overlay true edge tak */
+html{ scrollbar-gutter: stable; }
+/* ── 19 · SKILL DETAIL PAGES premium + aligned ───────────────── */
+body:has(main.skill-detail-page) .skill-overlay-close{
+  position: fixed; top: 76px; left: 22px; right: auto; z-index: 55;
+  width: 44px; height: 44px; background: var(--bg);
+}
+body:has(main.skill-detail-page) .theme-toggle.float{
+  top: 76px; right: 22px; bottom: auto; left: auto;
+  width: 44px; height: 44px; padding: 0;
+  display: grid; place-items: center; z-index: 55;
+}
+.skill-detail-header{ padding: clamp(24px, 3.5vh, 44px) 0 26px; }
+.skill-detail-header p{ font-family: var(--serif); font-size: 16px; line-height: 1.8; }
+.language-card{
+  grid-template-columns: 72px 1fr; align-items: start; gap: 22px;
+  padding: 24px 10px; border-radius: 6px;
+  transition: background .25s var(--ease);
+}
+.language-card.hv{ background: var(--bg-2); }
+.language-number{
+  width: 44px; height: 44px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--surface); color: var(--mark-ink);
+  font-size: 13px; padding-top: 0;
+  align-self: start; margin-top: -8px;  /* badge = heading ki line ke beech me */
+}
+.language-content h2{ font-size: 21px; letter-spacing: -.01em; }
+.language-content p{ margin-top: 6px; color: var(--text-2); font-size: 14px; line-height: 1.7; }
+.skill-page-navigation, .skill-category-nav{ align-items: center; margin-top: clamp(36px, 7vh, 64px); }
+.skill-page-btn{
+  width: 48px; height: 48px; background: var(--surface);
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+}
+.skill-page-btn:hover{
+  background: var(--mark); color: #100F0D; border-color: var(--mark); transform: translateY(-2px);
+}
+/* coming-soon card bhi baaki cards jaisa aligned */
+.language-card.coming-language{
+  display: grid; grid-template-columns: 72px 1fr; align-items: start; gap: 22px;
+  border: 0; border-bottom: 1px solid var(--line-soft); border-radius: 0;
+  padding: 24px 10px; margin-top: 0; width: 100%;
+  font-family: var(--serif); font-size: inherit; font-weight: 400;
+  letter-spacing: 0; text-transform: none; color: var(--text-2);
+}
+.language-card.coming-language h2{ font-style: italic; color: var(--text-2); }
+.language-card.coming-language p{ color: var(--text-3); }
+/* single nav button ho to center me (aligned look) */
+.skill-page-navigation .skill-page-btn:only-child,
+.skill-category-nav .skill-page-btn:only-child{ margin: 0 auto; }
+/* single-button nav → center (aligned across all skill pages) */
+.skill-page-navigation.single-next, .skill-page-navigation.single-prev,
+.skill-category-nav.single-next, .skill-category-nav.single-prev{ justify-content: center; }
+/* ── 20 · PREV/NEXT = side-edge middle arrows ──────────────────── */
+.skill-page-navigation, .skill-category-nav{ margin-top: 0; }
+main.skill-detail-page .skill-page-btn{
+  position: fixed; top: 50%; z-index: 45; margin: 0; background: var(--bg);
+}
+main.skill-detail-page .skill-page-btn[aria-label="Previous"]{ left: 18px; transform: translateY(-50%); }
+main.skill-detail-page .skill-page-btn[aria-label="Next"]{ right: 18px; transform: translateY(-50%); }
+main.skill-detail-page .skill-page-btn:hover{ transform: translateY(calc(-50% - 2px)); }
+@media (max-width: 720px){
+main.skill-detail-page .skill-page-btn[aria-label="Previous"]{ left: 8px; }
+main.skill-detail-page .skill-page-btn[aria-label="Next"]{ right: 8px; }
+
+}
+/* ── 21 · MUSIC BAR premium glass + naya layout ───────────────── */
+:root{ --glass: rgba(244, 241, 234, .62); --glass-line: rgba(16, 15, 13, .1); }
+[data-theme="dark"]{ --glass: rgba(22, 21, 18, .55); --glass-line: rgba(244, 241, 234, .12); }
+/* art box KABHI gayab nahi hota photo na ho to fallback glyph */
+@media (max-width: 720px){
+
+
+}
+/* ── 22 · TRAILER TEXT likhne ke liye proper jagah ────────────── */
+.verse-detail-text{
+  max-width: min(780px, 88vw);
+  bottom: clamp(96px, 16vh, 150px);
+}
+.verse-detail-tag{ margin-bottom: 16px; }
+.verse-detail-text p{
+  margin-top: 18px;
+  font-size: clamp(14.5px, 1.5vw, 17.5px);
+  line-height: 1.85;
+  max-width: 68ch;
+  max-height: 36vh;
+  overflow-y: auto;
+  padding-right: 12px;
+  text-shadow: 0 1px 10px rgba(10, 9, 8, .55);
+  scrollbar-width: thin;
+}
+@media (max-width: 720px){
+.verse-detail-text{ bottom: clamp(88px, 13vh, 120px); }
+.verse-detail-text p{ max-height: 30vh; font-size: 14px; }
+
+}
+/* ── 23 · NOW-PLAYING EQUALIZER + name row ──────────────────────── */
+@keyframes mkeq{ 0%, 100% { height: 25%; } 50% { height: 100%; } }
+/* ── 24 · FINAL POLISH BATCH ────────────────────────────────────── */
+/* about section edges se saans */
+.hero-about{
+  max-width: 1160px; margin-inline: auto;
+  padding-inline: clamp(18px, 4vw, 44px);
+  padding-block: clamp(44px, 8vh, 84px);
+  gap: clamp(30px, 4vw, 64px);
+}
+.hero-left .hero-bigname{ font-size: clamp(52px, 9vw, 118px); }
+.hero-right p{ max-width: 58ch; font-size: 14.5px; line-height: 1.85; }
+.lang-list{ max-width: 430px; }
+.contact-links{ display: flex; flex-wrap: wrap; gap: 8px; }
+.contact-link{ padding: 6px 12px; font-size: 10px; }
+/* soft skills 3×3 fixed SIRF desktop/tablet (phone me niche 1 column) */
+@media (min-width: 901px){
+.soft-skills-grid{ grid-template-columns: repeat(3, 1fr); }
+
+}
+/* trailer: photo layer video ke upar nahi */
+.verse-detail.has-trailer .verse-detail-media{ display: none; }
+/* beyond X opaque */
+.beyond-page .skill-overlay-close{
+  background: #FFFFFF; color: #0C0B0A; border-color: rgba(12, 11, 10, .18);
+}
+.beyond-page .skill-overlay-close:hover{ background: #0C0B0A; color: #FFFFFF; }
+[data-theme="dark"] .beyond-page .skill-overlay-close{
+  background: #171613; color: #F4F1EA; border-color: rgba(244, 241, 234, .22);
+}
+[data-theme="dark"] .beyond-page .skill-overlay-close:hover{ background: #F4F1EA; color: #0C0B0A; }
+/* hobbies hv se protected + text aligned */
+.hobby-card.hv, .hobby-card.hv .hobby-bg{ transform: none; }
+.hobby-card.hv{ box-shadow: none; border-color: var(--line); }
+.hobby-body{ text-align: left; }
+.hobby-body p{ line-height: 1.7; margin-top: 8px; }
+/* anchor jumps sticky nav ke niche title na chhupe */
+section[id]{ scroll-margin-top: 76px; }
+/* ── 25 · CORRECTION BATCH (v43) ────────────────────────────────── */
+/* contact links 5 ROWS × 2 COLUMNS matrix, chhote boxes */
+.contact-links{
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(5, auto);
+  gap: 8px;
+}
+.contact-link{
+  justify-self: stretch; text-align: center;
+  padding: 6px 8px; font-size: 10px; letter-spacing: .1em; border-radius: 4px;
+}
+@media (max-width: 380px){
+.contact-links{ grid-template-columns: 1fr; grid-template-rows: none; }
+
+}
+/* hobbies headings + context ek hi line se shuru, barabar height */
+.hobby-body{ width: 100%; }
+.hobby-body h3, .hobby-body h4{
+  line-height: 1.25; min-height: 2.5em;
+  display: flex; align-items: flex-end;
+}
+.hobby-body p{
+  line-height: 1.7; margin-top: 8px;
+  /* POORA context dikhe koi line-clamp / "..." nahi */
+  display: block; overflow: visible; max-height: none; min-height: 0;
+}
+/* journey hover ab JS .hv se (scroll pe bhi lagta hai, hat-ta bhi hai) */
+.journey-item{ border-radius: 8px; padding-left: 10px; margin-left: -10px; transition: background .25s var(--ease); }
+/* LIGHT theme me verse-detail overlay ke andar ke controls */
+:root:not([data-theme="dark"]){
+  --ov-btn: rgba(255, 255, 255, .78);
+  --ov-btn-on: rgba(255, 255, 255, .95);
+}
+:root:not([data-theme="dark"]) .verse-trailer-scrim{
+  background:
+    linear-gradient(to top, rgba(251, 249, 244, .95) 0%, rgba(251, 249, 244, .62) 34%,
+    rgba(251, 249, 244, .22) 60%, rgba(251, 249, 244, .72) 100%);
+}
+:root:not([data-theme="dark"]) .verse-detail-media img{ opacity: .34; }
+/* ── 26 · VERSE-DETAIL (TRAILER VIEW) HAMESHA BLACK ─────────────
+   Light theme ho ya dark, card kholte hi cinematic black overlay. */
+.verse-detail{
+  --ov-bg: #0C0B0A;
+  --ov-line: rgba(237, 235, 228, .16);
+  --ov-text: #EDEBE4;
+  --ov-text-2: #A29D92;
+  --ov-mark: #FF3B52;
+  --ov-btn: rgba(23, 22, 19, .62);
+  --ov-btn-on: rgba(12, 11, 10, .72);
+  background: #0C0B0A !important;
+  color: var(--ov-text);
+}
+.verse-detail .verse-trailer-scrim{
+  background:
+    linear-gradient(to top, rgba(10, 9, 8, .92) 0%, rgba(10, 9, 8, .35) 34%,
+    rgba(10, 9, 8, .12) 60%, rgba(10, 9, 8, .35) 100%) !important;
+}
+.verse-detail .verse-detail-media img{ opacity: .5 !important; }
+.verse-detail .verse-detail-tag{ color: var(--ov-mark) !important; }
+.verse-detail .verse-detail-text h4{ color: var(--ov-text) !important; }
+.verse-detail .verse-detail-text p{ color: var(--ov-text-2) !important; }
+/* ── 27 · TRAILER VIEW POLISH ───────────────────────────────────── */
+/* trailer chalu ho → scrollbar rail + arrows GAYAB (trailer poora screen le) */
+body.verse-card-open .mk-scroll,
+body.verse-card-open .mk-scroll *{ display: none !important; }
+/* trailer ka X BLACK opaque background, RED cross.
+   Hover = sirf pop (scale) + glow shadow, koi colour change NAHI */
+.verse-close{
+  background: #0C0B0A !important;
+  border: 1px solid rgba(237, 235, 228, .2) !important;
+  color: #FF3B52 !important;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease) !important;
+}
+.verse-close:hover,
+.verse-close:focus-visible{
+  background: #0C0B0A !important;
+  border-color: rgba(237, 235, 228, .2) !important;
+  color: #FF3B52 !important;
+  transform: scale(1.14);
+  box-shadow:
+    0 0 0 1px rgba(255, 59, 82, .55),
+    0 10px 28px rgba(255, 59, 82, .45),
+    0 4px 14px rgba(0, 0, 0, .55);
+}
+.verse-close:active{ transform: scale(1.05); }
+/* ── 28 · JOURNEY photo + poora part = EK hi hover target ─────── */
+/* hover sirf photo par (text par koi hover effect nahi) */
+/* ── 29 · ABOUT paragraph block ka end, Japanese bar ke level tak ── */
+@media (min-width: 901px){
+/* right column chauda → text kam lines me → block ki height language-list
+     ke barabar (Japanese bar wahi aakhri row hai) */
+.hero-about{ grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+.hero-right p{ line-height: 1.75; }
+.hero-right p + p{ margin-top: 11px; padding-top: 11px; }
+
+}
+/* ── 30 · FOOTER LOGO "M" hamesha SAFED ──────────────────────────
+   Box ka rang theme ke saath badle: light = dark navy, dark = red.
+   Letter (#FFFFFF) dono theme me safed hi rahega. */
+.site-footer .footer-mark{
+  background: var(--mark);
+  border: 1px solid var(--mark);
+  color: #FFFFFF !important;
+}
+/* ═══════════════════════════════════════════════════════════════════
+   32 · RESPONSIVE NAV phone pe hamburger menu
+   Desktop: purani wali ek hi line (koi farq nahi).
+   Phone : ☰ dabao → saare links neeche khul jaate hain.
+   ═══════════════════════════════════════════════════════════════════ */
+/* desktop wrapper invisible, nav bilkul waise hi */
+.main-nav .nav-links{ display: contents; }
+.nav-toggle{ display: none; }
+@media (max-width: 860px){
+/* ── hamburger button ── */
+.nav-toggle{
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    margin-left: auto; padding: 0 2px 0 10px; height: 44px;
+    background: none; border: 0; cursor: pointer; color: var(--text);
+    font-family: var(--sans); font-size: 10.5px; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase;
+    -webkit-tap-highlight-color: transparent;
+  }
+.nav-toggle::after{ content: "Menu"; }
+.nav-toggle[aria-expanded="true"]::after{ content: "Close"; }
+.nav-burger{ position: relative; display: block; width: 20px; height: 12px; flex: none; }
+.nav-burger i{
+    position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px;
+    background: currentColor;
+    transition: transform .32s var(--ease), opacity .2s var(--ease);
+  }
+.nav-burger i:nth-child(1){ top: 0; }
+.nav-burger i:nth-child(2){ top: 5px; }
+.nav-burger i:nth-child(3){ top: 10px; }
+.nav-toggle[aria-expanded="true"] .nav-burger i:nth-child(1){ transform: translateY(5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-burger i:nth-child(2){ opacity: 0; }
+.nav-toggle[aria-expanded="true"] .nav-burger i:nth-child(3){ transform: translateY(-5px) rotate(-45deg); }
+/* ── nav bar khud ── */
+.main-nav{ overflow: visible; position: relative; gap: 0; padding: 0 var(--pad); }
+.beyond-nav{ position: sticky; top: 0; }
+.beyond-nav .nav-toggle{ margin-right: 0; }
+.beyond-nav{ display: flex; align-items: center; padding: 0 var(--pad); min-height: 54px; }
+/* ── links → dropdown panel ── */
+.main-nav .nav-links,
+  .beyond-nav .nav-links{
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 70;
+    flex-direction: column; align-items: stretch; gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 22px 44px rgba(0, 0, 0, .14);
+    padding: 4px var(--pad) 12px;
+    max-height: calc(100svh - 60px); overflow-y: auto;
+  }
+:root[data-theme="dark"] .main-nav .nav-links,
+  :root[data-theme="dark"] .beyond-nav .nav-links{ box-shadow: 0 22px 44px rgba(0, 0, 0, .5); }
+.main-nav.is-open .nav-links,
+  .beyond-nav.is-open .nav-links{ display: flex; }
+.main-nav .nav-links a,
+  .beyond-nav .nav-links a{
+    flex: none; text-align: left; width: 100%;
+    padding: 14px 2px; font-size: 12px; letter-spacing: .16em;
+    border-bottom: 1px solid var(--line);
+  }
+.main-nav .nav-links a:last-child,
+  .beyond-nav .nav-links a:last-child{ border-bottom: 0; }
+.main-nav .nav-links a::after{ left: 2px; right: auto; width: 22px; bottom: 8px; }
+.beyond-nav .nav-links a::after{ display: none; }
+.beyond-nav .nav-links a.active{ color: var(--mark); }
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   33 · PHONE beyond: rail/arrows hatao + reels-style swipe
+   ═══════════════════════════════════════════════════════════════════ */
+/* (3+4) custom scroll rail + up/down arrows DONO pages, HAR screen par
+         nahi chahiye. Scroll ab bilkul native hai, koi custom widget nahi. */
+.mk-scroll{ display: none !important; }
+@media (max-width: 860px){
+/* (4) trailer overlay → Insta-reels style: arrows ki jagah vertical swipe */
+.verse-navigation{ display: none !important; }
+.reels-hint{
+    position: absolute; z-index: 7; left: 50%; bottom: 62px;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 14px; border-radius: 999px;
+    background: rgba(12, 11, 10, .5);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, .16);
+    color: rgba(255, 255, 255, .82);
+    font-family: var(--sans); font-size: 9.5px; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase;
+    white-space: nowrap; pointer-events: none;
+    animation: reelsHint 3.4s var(--ease) .8s 1 both;
+  }
+.reels-hint-ico{
+    width: 12px; height: 12px; flex: none; border-radius: 999px;
+    border: 1.5px solid currentColor; position: relative; opacity: .9;
+  }
+.reels-hint-ico::after{
+    content: ""; position: absolute; left: 50%; top: 3.5px;
+    width: 3px; height: 3px; border-left: 1.5px solid currentColor;
+    border-top: 1.5px solid currentColor;
+    transform: translateX(-50%) rotate(45deg);
+  }
+.reels-hint.is-end .reels-hint-ico{ display: none; }
+.verse-detail:not(.is-open) .reels-hint{ display: none; }
+
+}
+@media (min-width: 861px){
+.reels-hint{ display: none; }
+
+}
+@keyframes reelsHint{
+  0% { opacity: 0; transform: translate(-50%, 10px); }
+  12% { opacity: 1; transform: translate(-50%, 0); }
+  72% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -8px); }
+}
+/* ═══════════════════════════════════════════════════════════════════
+   34 · TECHNICAL SKILLS nav bar + card redesign (hover HATA diya)
+   ═══════════════════════════════════════════════════════════════════ */
+/* (5) har skill page ke top par nav bar bilkul main page jaisa.
+       Padding isliye: left me X (44px) aur right me theme toggle (44px)
+       fixed hain, nav unke beech me chalta hai. */
+.skill-nav.main-nav{
+  position: sticky; top: 0; z-index: 50;
+  min-height: 62px; padding: 0 var(--pad);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+/* (6a) TECHNICAL SKILLS CARDS HOVER RESTORE
+   Resting state = naya design (surface + line). Hover = poora card
+   accent (light: navy / dark: red), text safed, arrow circle safed. */
+#skills .skill-card.hv{
+  transform: translateY(-5px) !important;
+  background: var(--mark) !important;
+  border-color: var(--mark) !important;
+  box-shadow: 0 22px 48px var(--shadow), 0 8px 28px var(--glow) !important;
+}
+#skills .skill-card.hv .skill-info h3,
+#skills .skill-card.hv .skill-info h3::before,
+#skills .skill-card.hv .skill-card-content,
+#skills .skill-card.hv p,
+#skills .skill-card.hv .placeholder-note{ color: #FFFFFF !important; }
+#skills .skill-card.hv .skill-arrow{
+  background: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  color: var(--mark) !important;
+}
+#skills .skill-card.hv .skill-arrow svg{ transform: translateX(3px) !important; }
+/* (6b) cards ka naya professional design */
+#skills .skills-grid{ counter-reset: skillno; }
+#skills .skill-card{
+  position: relative;
+  align-items: center;
+  padding: 19px 20px 19px 24px;
+  border-radius: 4px;
+  background: var(--surface);
+}
+/* baayi taraf patili accent line hamesha, hover se koi lena-dena nahi */
+#skills .skill-card::before{
+  content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 2px;
+  background: var(--mark); border-radius: 2px; opacity: .75;
+}
+#skills .skill-card .skill-info{ counter-increment: skillno; min-width: 0; }
+#skills .skill-card .skill-info h3{
+  font-size: 16.5px; font-weight: 600; letter-spacing: -.005em;
+  line-height: 1.3; margin: 0; color: var(--text);
+}
+#skills .skill-card .skill-info h3::before{
+  content: none; /* v71: card number hataya */
+  display: block; margin-bottom: 7px;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+  letter-spacing: .2em; color: var(--mark-ink); opacity: .95;
+}
+#skills .skill-card .skill-arrow{
+  width: 32px; height: 32px; flex: none;
+}
+/* (6c) X (back to main page) ab dull nahi, theme ke hisaab se glow kare */
+body:has(main.skill-detail-page) .skill-overlay-close,
+#skillOverlayClose,
+.skill-overlay-close{
+  transition: background .28s var(--ease), color .28s var(--ease),
+              border-color .28s var(--ease), transform .28s var(--ease),
+              box-shadow .28s var(--ease);
+}
+body:has(main.skill-detail-page) .skill-overlay-close:hover,
+.skill-overlay-close[data-close-overlay]:hover,
+#skillOverlayClose:hover{
+  background: var(--mark);
+  border-color: var(--mark);
+  color: #FFFFFF;
+  transform: scale(1.07);
+  box-shadow: 0 12px 30px var(--glow);
+}
+body:has(main.skill-detail-page) .skill-overlay-close:active,
+#skillOverlayClose:active{ transform: scale(.97); }
+/* OLD: #skillOverlayClose:hover { background: var(--text); color: var(--bg); } */
+/* ═══════════════════════════════════════════════════════════════════
+   35 · MUSIC BAR phone timestamp + seek bar (hover pop, click/drag)
+   ═══════════════════════════════════════════════════════════════════ */
+/* (7a) phone par timestamp wapas dikhe pehle 480px se niche hide tha */
+@media (max-width: 480px){
+
+
+}
+/* (7b) seek bar hover pe halka pop + thumb, click AUR drag dono se seek */
+/* chhoti line hai, par ungli/mouse pakadne ke liye bada hit-area */
+/* thumb sirf hover / drag par dikhe */
+/* ═══════════════════════════════════════════════════════════════════
+   36 · SKILL PAGES andar ke content ka hover BAND
+   (cards ke andar likhe text / language rows par mouse le jaane se
+    kuch nahi hoga. Bahar wale card ka hover waisa hi rahega.)
+   ═══════════════════════════════════════════════════════════════════ */
+main.skill-detail-page .language-card,
+main.skill-detail-page .language-card:hover,
+main.skill-detail-page .language-card.hv{
+  transform: none !important;
+  background: transparent !important;
+  border-color: var(--line-soft) !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+main.skill-detail-page .language-card::after,
+main.skill-detail-page .language-card.hv::after{ opacity: 1 !important; }
+/* ═══════════════════════════════════════════════════════════════════
+   37 · NATIVE SCROLLBAR dono pages se hata diya
+   (custom rail/arrows pehle hi delete ho chuke hain beyond.html se)
+   ═══════════════════════════════════════════════════════════════════ */
+/* kahin se bhi (inline style ho ya koi aur sheet) scrollbar aa jaaye nahi dikhega */
+html{ scrollbar-width: none !important; -ms-overflow-style: none !important; scrollbar-color: transparent transparent !important; }
+html::-webkit-scrollbar{ width: 0 !important; height: 0 !important; display: none !important; }
+html::-webkit-scrollbar-track,
+html::-webkit-scrollbar-thumb{ background: transparent !important; border: 0 !important; }
+/* koi bhi jagah se rail/arrows aa hi jaayein to bhi kabhi mat dikho */
+.mk-scroll, .mk-arr{ display: none !important; }
+/* ═══════════════════════════════════════════════════════════════════
+   38 · NAV BAR + MENU BUTTON teeno pages par EK JAISA
+   (pehle: index 62px, beyond 54px, skill 62px ab sab 62px,
+    burger hamesha 40×40 ka square, right edge se ek hi gap)
+   ═══════════════════════════════════════════════════════════════════ */
+:root{ --nav-h: 62px; --burger: 40px; }
+/* ── bar: ek hi height, ek hi padding ── */
+.main-nav,
+.skill-nav.main-nav,
+.beyond-nav{
+  box-sizing: border-box; /* border bhi andar sab 62px total */
+  height: var(--nav-h) !important; /* fixed: content+border mila kar 62 */
+  min-height: var(--nav-h) !important;
+  padding: 0 var(--pad) !important;
+  display: flex; align-items: center;
+}
+/* beyond ka padding andar wale div pe tha wahan se hatao */
+.beyond-nav .beyond-nav-inner{
+  min-height: 0 !important;
+  max-width: none;
+  padding: 0 !important;
+  margin: 0;
+  flex: 1 1 auto;
+}
+/* ── menu button: hamesha 40×40 square, sirf icon (koi "MENU" text nahi) ── */
+.nav-toggle{
+  width: var(--burger) !important;
+  height: var(--burger) !important;
+  padding: 0 !important;
+  margin: 0 0 0 auto !important;
+  gap: 0 !important;
+  flex: none;
+  align-items: center; justify-content: center;
+}
+.nav-toggle::after{ display: none !important; }
+/* text label hatao */
+.nav-burger{ width: 20px; height: 12px; flex: none; }
+/* ── links: teeno nav me ek hi size / gap ── */
+.main-nav .nav-links a,
+.beyond-nav .nav-links a,
+.skill-nav .nav-links a{ font-size: 11px; }
+/* ═══════════════════════════════════════════════════════════════════
+   39 · REEL STAGE trailer swipe layer (X / sound / hint hiltе nahi)
+   ═══════════════════════════════════════════════════════════════════ */
+.reel-stage{
+  position: absolute; inset: 0; z-index: 1;
+  will-change: transform;
+}
+@media (max-width: 860px){
+.reel-stage{ touch-action: none; }
+/* browser khud scroll na kare */
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   40 · CARD/TRAILER khula ho to BEYOND PAGE bilkul FREEZE
+   (card ke andar scroll karne se neeche wala page hilega nahi 
+    jab tak user khud card se exit kar ke page ko scroll na kare)
+   ═══════════════════════════════════════════════════════════════════ */
+html:has(body.verse-card-open){ overflow: hidden !important; }
+html:has(body.verse-card-open),
+body.verse-card-open{ overscroll-behavior: none; }
+@media (max-width: 860px){
+/* overlay ke andar kisi bhi tarah ka scroll gesture bahar na jaaye */
+.verse-detail, .reel-stage{ touch-action: none; overscroll-behavior: contain; }
+
+}
+/* beyond ka andar wala div: desktop par bar bhar ke, phone par DROPDOWN
+   (wahan height 100% lagane se panel 62px ka reh jaata tha aur links
+   bahar nikal jaate the isliye height sirf desktop par) */
+@media (min-width: 861px){
+.beyond-nav .beyond-nav-inner{ height: 100%; }
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   41 · TRAILER TEXT har card par EK HI size, EK HI alignment
+   Pehle text block neeche se anchor tha: title 1-line / 2-line hone se
+   block ki height badalti thi aur title 607px se 666px tak jump karta
+   tha. Ab upar se anchor + fixed size + title ke liye 2 line ki jagah.
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 860px){
+.verse-detail-text{
+    left: 18px !important; right: 18px !important;
+    top: 50% !important; /* UPAR se anchor → title ek hi jagah */
+    bottom: auto !important;
+    max-width: none !important;
+  }
+.verse-detail-tag{
+    display: block;
+    margin-bottom: 10px !important;
+    font-size: 10px !important;
+  }
+.verse-detail-text h4{
+    font-size: 30px !important; /* fixed clamp nahi, sab barabar */
+    line-height: 1.16 !important;
+    min-height: 1.2em !important; /* v71: 2 line ki reserve jagah hatayi → gap kam */
+    margin: 0 !important;
+  }
+.verse-detail-text p{
+    margin-top: 8px !important;
+    font-size: 14px !important; /* fixed */
+    line-height: 1.6 !important;
+    max-width: 100% !important;
+    max-height: 18vh !important;
+  }
+
+}
+/* desktop / tablet: description hamesha ek hi line se shuru ho */
+@media (min-width: 861px){
+.verse-detail-text h4{ min-height: 1.2em; }
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   42 · MENU dropdown X ke UPAR khule + teeno menu me EK JAISA underline
+   ═══════════════════════════════════════════════════════════════════ */
+/* (a) nav ka stacking context X (55) aur theme toggle (55) se UPAR.
+       70 isliye chuna trailer overlay (100) aur skill overlay (90) se
+       abhi bhi niche rahta hai, to menu unhe kabhi nahi dhakta. */
+.skill-nav.main-nav,
+.beyond-nav{ z-index: 70 !important; }
+/* (b) HOVER UNDERLINE teeno menu me bilkul ek jaisa:
+       left → right, 0 second delay, theme ka rang (light navy / dark red) */
+.main-nav a::after,
+.beyond-nav a::after{
+  background: var(--mark) !important;
+  border-radius: 2px;
+  transform-origin: left center !important;
+  transition: transform .28s var(--ease) !important;
+  transition-delay: 0s !important;
+}
+.main-nav a:hover::after, .main-nav a.active::after,
+.beyond-nav a:hover::after, .beyond-nav a.active::after{ transform: scaleX(1) !important; }
+/* (c) phone dropdown me bhi wahi underline (beyond me pehle display:none tha) */
+@media (max-width: 860px){
+.main-nav .nav-links a::after,
+  .beyond-nav .nav-links a::after,
+  .skill-nav .nav-links a::after{
+    display: block !important;
+    left: 2px !important; right: 2px !important; width: auto !important;
+    bottom: 8px !important; height: 2px !important;
+    background: var(--mark) !important;
+    transform: scaleX(0);
+    transform-origin: left center !important;
+    transition: transform .28s var(--ease) !important;
+    transition-delay: 0s !important;
+    pointer-events: none;
+  }
+.main-nav .nav-links a:hover::after,
+  .beyond-nav .nav-links a:hover::after,
+  .skill-nav .nav-links a:hover::after,
+  .main-nav .nav-links a.active::after,
+  .beyond-nav .nav-links a.active::after,
+  .skill-nav .nav-links a.active::after{ transform: scaleX(1) !important; }
+
+}
+/* (d) menu khula ho to X fade out (menu bilkul saaf dikhe).
+       THEME TOGGLE CHHUPAYA NAHI JAYEGA — menu ke khule rehne par bhi
+       user theme badal sakna chahiye. Nav panel ki z-index 70 hai,
+       isliye toggle ko uske UPAR (200) rakha gaya hai. */
+body:has(.skill-nav.is-open) .skill-overlay-close,
+body:has(.beyond-nav.is-open) .skill-overlay-close{
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity .2s var(--ease);
+}
+/* theme toggle: menu khula ho to bhi DIKHEGA + CLICKABLE rahega */
+body:has(.skill-nav.is-open) .theme-toggle.float,
+body:has(.beyond-nav.is-open) .theme-toggle.float,
+body:has(.main-nav.is-open) .theme-toggle.float{
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  z-index: 200 !important;
+  transition: opacity .2s var(--ease);
+}
+/* ═══════════════════════════════════════════════════════════════════
+   43 · NAV UNDERLINE sirf WORD KE BARABAR (poor link box nahi)
+   Link ka text ab <span> me hai → span hug karta hai text ko, isliye
+   underline bilkul word ki lambai jitni hoti hai. left→right, 0 delay.
+   ═══════════════════════════════════════════════════════════════════ */
+.main-nav a > span,
+.beyond-nav a > span,
+.skill-nav a > span{ position: relative; display: inline-block; }
+/* purana full-width underline band */
+.main-nav a::after,
+.beyond-nav a::after,
+.skill-nav a::after{ display: none !important; }
+.main-nav a > span::after,
+.beyond-nav a > span::after,
+.skill-nav a > span::after{
+  content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 2px;
+  background: var(--mark); border-radius: 2px;
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .28s var(--ease); transition-delay: 0s;
+  pointer-events: none;
+}
+.main-nav a:hover > span::after, .main-nav a.active > span::after,
+.beyond-nav a:hover > span::after, .beyond-nav a.active > span::after,
+.skill-nav a:hover > span::after, .skill-nav a.active > span::after{
+  transform: scaleX(1) !important;
+}
+@media (max-width: 860px){
+.main-nav .nav-links a::after,
+  .beyond-nav .nav-links a::after,
+  .skill-nav .nav-links a::after{ display: none !important; }
+.main-nav a > span::after,
+  .beyond-nav a > span::after,
+  .skill-nav a > span::after{ bottom: -4px; }
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   44 · WELCOME TITLE dono page par 1 LINE + underline animation
+   ═══════════════════════════════════════════════════════════════════ */
+/* main page: Mohit Kumar Acharya */
+.welcome-name{
+  display: inline-block !important;
+  white-space: nowrap !important;
+  max-width: 100% !important;
+  width: fit-content;
+  padding-bottom: 10px;
+  background: linear-gradient(var(--mark), var(--mark)) no-repeat left bottom !important;
+  background-size: 0% 2px !important;
+  transition: opacity .75s cubic-bezier(.2,.7,.2,1),
+              transform .75s cubic-bezier(.2,.7,.2,1),
+              filter .75s ease,
+              background-size .9s var(--ease) .45s !important;
+}
+.welcome-name.is-visible{ background-size: 100% 2px !important; }
+/* font-size = dono me se CHHOTA:
+   • normal clamp (desktop ka bada look)
+   • ya wo size jisme poora naam ek line me fit ho jaaye
+   → kisi bhi screen par text kabhi nahi katega. */
+.welcome-name{
+  font-size: min(clamp(52px, 10.5vw, 132px),
+                 calc((100vw - 2 * var(--pad)) / 10.2)) !important;
+}
+/* beyond page: Beyond My Coding Verse (underline animation pehle se thi) */
+.beyond-hero h1{ white-space: nowrap !important; }
+.beyond-hero h1{
+  font-size: min(clamp(44px, 9vw, 118px),
+                 calc((100vw - 2 * var(--pad)) / 11.4)) !important;
+}
+/* ═══════════════════════════════════════════════════════════════════
+   45 · v71 · CONTEXT TEXTS — pop-up animation + naya font style
+   Har section / card ke context text ko apni "pop" entry aur alag
+   font (serif) milta hai, taaki plain body text se alag dikhe.
+   ═══════════════════════════════════════════════════════════════════ */
+@keyframes contextPop{
+  0%   { opacity: 0; transform: translateY(16px) scale(.965); }
+  55%  { opacity: 1; transform: translateY(-3px) scale(1.012); }
+  78%  { transform: translateY(1px) scale(.998); }
+  100% { opacity: 1; transform: none; }
+}
+/* base state DIKHTA hai (JS fail ho to bhi text chhupe nahi);
+   animation lagte hi 0% keyframe (opacity 0) apply ho jata hai */
+.section-context{
+  font-family: var(--serif);
+  font-size: clamp(14.5px, 1.15vw, 16.5px);
+  font-weight: 400;
+  line-height: 1.78;
+  letter-spacing: .002em;
+  color: var(--text-2);
+  max-width: 68ch;
+}
+/* JS chal raha ho to context tab tak CHHUPA rahe jab tak is-visible na mile
+   → instant anchor-jump (jaise beyond nav se #movies) pe 1-frame flash nahi */
+html.has-js .section-context:not(.is-visible){ opacity: 0; }
+.reveal.is-visible .section-context,
+.section-context.is-visible{
+  animation: contextPop .72s cubic-bezier(.22,.84,.3,1) .1s both;
+}
+/* skill cards ke andar wala chhota context */
+#skills .skill-card .skill-info .skill-context{
+  margin: 8px 0 0;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  letter-spacing: .001em;
+  color: var(--text-3);
+}
+/* ID selector zyada specific hai, isliye animation yahin lagao */
+#skills.is-visible .skill-card .skill-info .skill-context,
+.reveal.is-visible .skill-card .skill-info .skill-context{
+  animation: contextPop .62s cubic-bezier(.22,.84,.3,1) .16s both;
+}
+@media (prefers-reduced-motion: reduce){
+.section-context, .skill-context{ animation: none !important; opacity: 1; transform: none; }
+
+}
+/* ═══════════════════════════════════════════════════════════════════
+   46 · v74 · TECHNICAL SKILLS CARDS — alignment + EK HI font
+   • content UPAR se align (pehle vertically center tha, isliye heading
+     alag-alag jagah padh rahe the)
+   • heading = BOLD + bada size   |   context = NON-BOLD + chota size
+   • heading ke liye 2 line ki jagah reserve → context bhi ek hi jagah se
+   ═══════════════════════════════════════════════════════════════════ */
+#skills .skill-card{ align-items: flex-start; }
+#skills .skill-card .skill-arrow{ align-self: center; }
+#skills .skill-card .skill-info{ width: 100%; min-width: 0; }
+#skills .skill-card .skill-info h3{
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;             /* BOLD — sirf heading */
+  line-height: 1.32;
+  letter-spacing: -.005em;
+  margin: 0;
+  color: var(--text);
+}
+/* NOTE: heading ki height har row me JS equalizer barabar karta hai
+   (motion.js · equalizeSkillCards) → har width pe perfect alignment */
+#skills .skill-card .skill-info .skill-context{
+  margin: 9px 0 0;
+  font-family: var(--serif);    /* heading wala HI font */
+  font-size: 13px;
+  font-weight: 400 !important;  /* NON-BOLD */
+  line-height: 1.62;
+  letter-spacing: 0;
+  color: var(--text-3);
+}
+/* ── 47 · v78 · SKILL CARDS phone par ──────────────────────────────
+   Phone par 72px ka number column + 22px gap text ko sirf ~236px me
+   simat deta tha → paragraph 9 line ka, card 292px lamba.
+   Column chhota karne se text chauda hota hai, kam line lagti hai,
+   card chhota ho jata hai (aur scrolling bhi kam).
+   ────────────────────────────────────────────────────────────────── */
+@media (max-width: 620px){
+.language-card,
+  .language-card.coming-language{
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+  }
+.language-card{ padding: 20px 10px; }
+.language-content h2{ font-size: 20px; }
+.language-content p{ font-size: 13.5px; line-height: 1.65; }
+
+}
+/* ── PHONE: trailer sound button TOP-LEFT, music player bottom pe wapas ──
+   (desktop layout same rahega; ye sirf phone/tablet width par lagta hai) */
+/* ══════════════════════════════════════════════════════════════════
+   ALIGNMENT PASS: theme button + X button sab pages par ek hi
+   size, ek hi top-line aur ek hi side-gap par.
+   (Beyond, sub-skill pages, Home, skill overlay sab same.)
+   ══════════════════════════════════════════════════════════════════ */
+:root{ --ctl-top: 72px; --ctl-size: 44px; --ctl-side: 22px; }
+/* floating theme button — har page par same */
+.theme-toggle.float,
+.beyond-page .theme-toggle.float{
+  top: var(--ctl-top) !important; bottom: auto !important;
+  right: var(--ctl-side) !important;
+  width: var(--ctl-size) !important; height: var(--ctl-size) !important;
+}
+/* sub-page / beyond ka back X (left side, theme ke saath same row) */
+.skill-overlay-close:not(#skillOverlayClose),
+.beyond-page .skill-overlay-close:not(#skillOverlayClose){
+  top: var(--ctl-top) !important; bottom: auto !important;
+  left: var(--ctl-side) !important; right: auto !important;
+  width: var(--ctl-size) !important; height: var(--ctl-size) !important;
+}
+/* ── Trailer overlay: mute + X ek hi row par ── */
+:root{ --vc-top: clamp(16px, 3vh, 28px); --vc-side: clamp(16px, 3vw, 30px); --vc-size: 46px; }
+.verse-close{
+  top: var(--vc-top) !important; bottom: auto !important;
+  right: var(--vc-side) !important;
+  width: var(--vc-size) !important; height: var(--vc-size) !important;
+}
+/* desktop: mute button top-LEFT corner me, X top-right me, dono ek hi line par */
+/* phone: mute top-LEFT, X top-RIGHT, dono ek hi line par */
+@media (max-width: 860px){
+
+
+}
+/* verse card ka naam HAR card me center: phone par left/right 10px
+   asymmetric ho raha tha (naam right ki taraf khisakta tha) */
+@media (max-width: 560px){
+.verse-card .verse-card-name{ left: 0 !important; right: 0 !important; }
+
+}
+/* ══ MOBILE BRAND: main nav ke top-left me PORTFOLIO logo (phone/tablet) ══ */
+.nav-brand{ display: none; }
+@media (max-width: 860px){
+.main-nav > .nav-brand{
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-right: auto; padding: 10px 0;
+    color: var(--text); text-decoration: none; flex: none;
+  }
+.main-nav > .nav-brand::after{ content: none; }
+.nb-mark{
+    width: 30px; height: 30px; border-radius: 9px;
+    display: grid; place-items: center;
+    background: var(--text); color: var(--bg);
+    font-family: var(--serif); font-style: italic; font-weight: 500;
+    font-size: 17px; line-height: 1;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+  }
+.nb-word{
+    font-family: var(--sans); font-size: 12px; font-weight: 700;
+    letter-spacing: .26em; text-transform: uppercase; line-height: 1;
+    position: relative; padding-bottom: 4px;
+  }
+.nb-word::after{
+    content: ""; position: absolute; left: 0; right: 18%; bottom: 0; height: 2px;
+    background: var(--mark-ink, var(--text)); border-radius: 2px;
+  }
+
+}
+/* brand ke andar kisi bhi purane underline/bar ko hatao (sirf logo dikhe) */
+@media (max-width: 860px){
+.main-nav > .nav-brand::before,
+  .main-nav > .nav-brand::after,
+  .main-nav > .nav-brand .nb-mark::before,
+  .main-nav > .nav-brand .nb-mark::after{ content: none !important; display: none !important; }
+
+}
+/* sirf M logo box dikhe: PORTFOLIO text hata diya, M box ke center me */
+@media (max-width: 860px){
+.main-nav > .nav-brand .nb-word{ display: none !important; }
+.main-nav > .nav-brand{ padding: 8px 0; }
+.main-nav > .nav-brand .nb-mark{
+    width: 34px; height: 34px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1; padding: 0; margin: 0;
+    font-size: 19px; font-style: italic;
+    padding-bottom: 2px; box-sizing: border-box;
+  }
+
+}
+/* M logo par hover koi effect nahi (sirf logo, baaki nav links waise hi) */
+@media (max-width: 860px){
+.main-nav > .nav-brand:hover,
+  .main-nav > .nav-brand:active,
+  .main-nav > .nav-brand:hover .nb-mark,
+  .main-nav > .nav-brand:active .nb-mark{
+    transform: none !important; opacity: 1 !important; filter: none !important;
+    background: transparent !important; box-shadow: none !important;
+    color: var(--text) !important;
+  }
+.main-nav > .nav-brand:hover .nb-mark,
+  .main-nav > .nav-brand:active .nb-mark{
+    background: var(--text) !important; color: var(--bg) !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12) !important;
+  }
+
+}
+/* ══ BEYOND PAGE nav: same M logo top-left (phone/tablet) ══ */
+.beyond-nav > .nav-brand{ display: none; }
+@media (max-width: 860px){
+.beyond-nav > .nav-brand{
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-right: auto; padding: 8px 0; flex: none;
+    color: var(--text); text-decoration: none;
+  }
+.beyond-nav > .nav-brand::before,
+  .beyond-nav > .nav-brand::after{ content: none !important; display: none !important; }
+.beyond-nav > .nav-brand .nb-word{ display: none !important; }
+.beyond-nav > .nav-brand .nb-mark{
+    width: 34px; height: 34px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1; padding: 0 0 2px; margin: 0; box-sizing: border-box;
+    font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 19px;
+    background: var(--text); color: var(--bg);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
+  }
+.beyond-nav > .nav-brand:hover,
+  .beyond-nav > .nav-brand:active{
+    transform: none !important; opacity: 1 !important; filter: none !important;
+    background: transparent !important; box-shadow: none !important; color: var(--text) !important;
+  }
+.beyond-nav > .nav-brand:hover .nb-mark,
+  .beyond-nav > .nav-brand:active .nb-mark{
+    background: var(--text) !important; color: var(--bg) !important; transform: none !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12) !important;
+  }
+
+}
+/* ===== BEYOND TRAILER CARDS → Journey jaisi horizontal rows =====
+   Left: photo · Right: name + description. Koi hover effect nahi (photo/row dono pe). */
+.verse-grid.verse-list{
+  display: flex; flex-direction: column; gap: 22px; margin-top: 26px;
+}
+.verse-row{
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) 1fr;
+  align-items: center;
+  gap: clamp(20px, 3vw, 40px);
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  text-align: left;
+}
+.verse-row-photo{
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--bg-2);
+}
+.verse-row-photo img{
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: saturate(.85);
+}
+.verse-row.no-image .verse-row-photo img{ display: none; }
+.verse-row.no-image .verse-row-photo::before{
+  content: attr(data-fallback);
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  font-size: 42px; color: var(--mark-ink);
+}
+.verse-row-name{
+  font-family: var(--serif); font-style: italic; font-weight: 400;
+  font-size: clamp(22px, 2.6vw, 34px); line-height: 1.2;
+  color: var(--text); margin: 0 0 12px;
+}
+.verse-row-desc{
+  font-family: var(--serif); font-size: clamp(14.5px, 1.15vw, 16.5px);
+  line-height: 1.78; color: var(--text-2); margin: 0;
+}
+@media (max-width: 640px){
+.verse-grid.verse-list{ gap: 16px; }
+.verse-row{
+    grid-template-columns: minmax(0, 42%) 1fr;
+    gap: 14px; padding: 12px;
+  }
+.verse-row-name{ font-size: 18px; margin-bottom: 6px; }
+.verse-row-desc{ font-size: 13px; line-height: 1.6; }
+.verse-row.no-image .verse-row-photo::before{ font-size: 30px; }
+
+}
+/* photo hover (pehle wale card jaisa): photo utha, zoom, glow border */
+.verse-row-photo{
+  transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.verse-row-photo img{
+  transition: transform .5s var(--ease), filter .35s var(--ease);
+}
+.verse-row-photo.hv{
+  transform: translateY(-6px);
+  border-color: var(--mark);
+  box-shadow: 0 20px 48px var(--glow), 0 10px 26px rgba(0, 0, 0, .22);
+}
+.verse-row-photo.hv img{
+  transform: scale(1.07);
+  filter: saturate(1.06) contrast(1.05);
+}
+/* photo par haath wala cursor */
+.verse-row-photo{ cursor: pointer; }
+/* courses cards par haath wala cursor */
+.course-card{ cursor: pointer; }
+/* ===== BEYOND cards: link + studio tag ===== */
+.verse-row{ position: relative; color: inherit; text-decoration: none; }
+.verse-row-photo-link{ display: block; color: inherit; text-decoration: none; }
+.verse-row-body{ padding-bottom: 26px; }
+.verse-row-studio{
+  position: absolute; right: 18px; bottom: 12px;
+  font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--text-2); font-family: var(--sans, inherit);
+  pointer-events: none;
+}
+@media (max-width: 640px){
+.verse-row-body{ padding-bottom: 22px; }
+.verse-row-studio{ right: 12px; bottom: 9px; font-size: 9.5px; letter-spacing: .08em; }
+
+}
+/* ===== SPOTIFY PLAYER ===== */
+
+/* ===== DESKTOP FULL-WIDTH (sirf PC ≥861px; phone/tablet par koi change nahi) =====
+   Beyond page cards + Journey section ko screen ki poori width do. */
+@media (min-width: 861px){
+  /* Journey: photo bada, text column screen ki baaki width le */
+  #journey .journey-content{
+    grid-template-columns: minmax(0, 44%) minmax(0, 1fr);
+    gap: 28px clamp(40px, 4vw, 72px);
+  }
+  #journey .journey-photo{ height: clamp(280px, 27vw, 420px); }
+  #journey .journey-text{ max-width: none; font-size: clamp(16.5px, 1.2vw, 19px); }
+  #journey .journey-content h3{ font-size: clamp(24px, 2.2vw, 34px); }
+
+  /* Beyond: --wrap cap hatao, cards poori width mein */
+  .beyond-main{ max-width: none; padding: 0 clamp(24px, 3vw, 56px) 40px; }
+  .beyond-page .verse-grid.verse-list{ gap: 26px; }
+  /* card bada, photo pehle jaisa (320px wide, 3:4) */
+  .beyond-page .verse-row{
+    min-height: 500px;
+    gap: clamp(40px, 4.4vw, 84px);
+    padding: 36px 40px;
+  }
+  .beyond-page .verse-row-name{ font-size: clamp(26px, 2.6vw, 44px); margin-bottom: 16px; }
+  .beyond-page .verse-row-desc{ font-size: clamp(16px, 1.25vw, 19px); line-height: 1.8; }
+  .beyond-page .hobbies-grid{ gap: 22px; }
+}

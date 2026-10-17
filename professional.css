@@ -1,0 +1,2050 @@
+/*
+  Mohit's portfolio visual refinement layer
+  Keeps the existing page structure, music-driven themes and cinematic effects.
+*/
+:root{
+  --dyn-hue: 214;
+  --dyn-sat: 24%;
+  --dyn-bg-l: 7%;
+  --dyn-accent-l: 70%;
+  --dyn-text: #f2f5f8;
+  --dyn-text-dim: #aab6c4;
+  --dyn-accent: #8fe0d0;
+  --dyn-border: rgba(143, 224, 208, 0.22);
+  --bg: #080d13;
+  --bg-soft: #0d141c;
+  --text: var(--dyn-text, #f2f5f8);
+  --text-dim: var(--dyn-text-dim, #aab6c4);
+  --accent: var(--dyn-accent, #8fe0d0);
+  --accent-soft: color-mix(in srgb, var(--accent) 15%, transparent);
+  --border: var(--dyn-border, rgba(143, 224, 208, 0.22));
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-hover: rgba(255, 255, 255, 0.065);
+  --line: rgba(235, 243, 250, 0.11);
+  --maxw: 1160px;
+  --shadow-soft: 0 24px 70px rgba(0, 0, 0, 0.28);
+  --radius-lg: 24px;
+}
+html{
+  scroll-padding-top: 92px;
+  scrollbar-color: rgba(143, 224, 208, 0.32) rgba(255, 255, 255, 0.025);
+}
+body{
+  color: var(--text) !important;
+  background: hsl(var(--dyn-hue) var(--dyn-sat) var(--dyn-bg-l)) !important;
+  font-family: var(--font-body, Inter, "Segoe UI", sans-serif);
+  line-height: 1.7;
+}
+h1, h2, h3, h4{
+  color: var(--text);
+  text-wrap: balance;
+}
+p{ color: var(--text-dim); }
+::selection{
+  background: var(--accent);
+  color: #07100f;
+}
+a:focus-visible,
+button:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+/* Top navigation */
+.site-header{
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 74px;
+  padding: 0 max(28px, calc((100vw - var(--maxw)) / 2));
+  border-bottom: 1px solid rgba(235, 243, 250, 0.075);
+  background: rgba(8, 13, 19, 0.72);
+  -webkit-backdrop-filter: blur(18px) saturate(145%);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+/* (Brand mark and name removed from the header.) */
+.main-nav{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.3vw, 30px);
+  margin: 0 24px;
+}
+.main-nav a{
+  position: relative;
+  padding: 8px 0;
+  color: rgba(230, 237, 244, 0.68);
+  font-size: 0.79rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.main-nav a::after{
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  left: 0;
+  height: 1px;
+  background: var(--accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+.main-nav a:hover,
+.main-nav a.active{ color: var(--text); }
+.main-nav a:hover::after,
+.main-nav a.active::after{ transform: scaleX(1); }
+.welcome-cta{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 44%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--text);
+  font-size: 0.79rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.welcome-cta span{ color: var(--accent); }
+.welcome-cta{
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+/* Refined staggered intro no typewriter cursor */
+.welcome{
+  min-height: 100svh;
+  padding: 112px 24px 90px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.welcome::after{
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  top: 24%;
+  right: 5%;
+  width: 1px;
+  height: 52%;
+  background: linear-gradient(transparent, rgba(255,255,255,.13), transparent);
+}
+.welcome-inner{
+  width: min(100%, 980px);
+  /* Hero text ko LEFT pin karo margin-auto hatao, extra padding mat
+     jodo (main container ka centering hi kaafi hai). Design ko right
+     me saaf jagah milti hai. */
+  margin: 0;
+  text-align: left;
+}
+/* (PORTFOLIO kicker chip removed.) */
+.welcome-subtitle,
+.welcome-cta{
+  margin-left: 5px;
+}
+.welcome-eyebrow{
+  min-height: 1.6em;
+  margin: 0 0 2px 5px;
+  color: var(--accent) !important;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .45s ease, transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.welcome-eyebrow.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+.welcome-name{
+  min-height: 1.05em;
+  margin: 0 0 18px;
+  color: var(--text);
+  font-size: clamp(3.25rem, 9.6vw, 7.2rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 1.03;
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(4px);
+  transition:
+    opacity .75s cubic-bezier(.2,.7,.2,1),
+    transform .75s cubic-bezier(.2,.7,.2,1),
+    filter .75s ease;
+}
+.welcome-name.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.welcome-subtitle{
+  max-width: 48ch;
+  margin-top: 20px;
+  margin-bottom: 28px;
+  color: var(--text-dim);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.8;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .55s ease .18s, transform .55s ease .18s;
+}
+.welcome-name.is-visible ~ .welcome-subtitle{
+  opacity: 1;
+  transform: translateY(0);
+}
+.welcome-cta{
+  margin-top: 3px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .55s ease .32s, transform .55s ease .32s;
+}
+.welcome-name.is-visible ~ .welcome-cta{
+  opacity: 1;
+  transform: translateY(0);
+}
+.welcome-name.is-visible ~ .welcome-cta:hover{
+  transform: translateY(-2px);
+}
+/* (Scroll-to-explore hint removed.) */
+/* Small section indicator */
+/* About */
+.hero-about{
+  position: relative;
+  max-width: var(--maxw);
+  grid-template-columns: minmax(240px, .72fr) minmax(0, 1.28fr);
+  gap: clamp(42px, 8vw, 110px);
+  padding: clamp(78px, 11vw, 142px) 28px clamp(85px, 11vw, 140px);
+}
+.hero-about::before{
+  position: absolute;
+  top: 0;
+  right: 28px;
+  left: 28px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 14%, var(--line) 86%, transparent);
+  content: "";
+}
+.hero-left{ min-width: 0; }
+.hero-bigname{
+  color: var(--text);
+  font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: -0.085em;
+  line-height: .98;
+}
+.hero-tagline{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 5px 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  border-radius: 99px;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  color: var(--accent) !important;
+  font-size: .78rem;
+  font-weight: 600;
+}
+.hero-tagline::before{
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  content: "";
+}
+.hero-block{ margin-top: 35px; }
+.hero-label{
+  margin-bottom: 12px;
+  color: rgba(226,235,242,.58) !important;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+.contact-links{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  position: relative;
+  z-index: 2;
+}
+.contact-link{
+  min-width: 0;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255,255,255,.025);
+  color: var(--text-dim) !important;
+  font-size: .76rem;
+  text-decoration: none;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.contact-link:hover{
+  gap: 10px;
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 48%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--accent) !important;
+}
+/* Don't show the unconfigured placeholder URLs as dead social links. */
+.contact-link[href="https://not working"]{ display: none; }
+.lang-list{ gap: 12px; }
+.lang-list li{ gap: 12px; font-size: .79rem; }
+.lang-name{ color: var(--text-dim) !important; }
+.lang-bar{
+  height: 5px;
+  border: 1px solid rgba(255,255,255,.045);
+  background: rgba(255,255,255,.075);
+}
+.lang-bar i{ background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 65%, transparent), var(--accent)); }
+.hero-right{
+  position: relative;
+  padding: clamp(22px, 3vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
+  box-shadow: var(--shadow-soft);
+}
+.hero-right::before{
+  position: absolute;
+  top: 22px;
+  left: -1px;
+  width: 2px;
+  height: 54px;
+  border-radius: 0 4px 4px 0;
+  background: var(--accent);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--accent) 55%, transparent);
+  content: "";
+}
+.hero-right p{
+  max-width: 68ch;
+  margin: 0 0 15px;
+  color: var(--text-dim) !important;
+  font-size: .94rem;
+  line-height: 1.85;
+}
+.hero-right p:first-child{
+  color: var(--text) !important;
+  font-size: 1.08rem;
+}
+.hero-right p:last-child{ margin-bottom: 0; }
+.hero-right p em{ color: var(--accent) !important; }
+/* Main sections and the numbered editorial rhythm */
+#main-showcase{ max-width: var(--maxw); padding: 0 28px 80px; }
+.showcase-section{
+  padding: clamp(64px, 8vw, 100px) 0;
+  border-top: 1px solid var(--line);
+}
+.showcase-section::before{ display: none; }
+.section-title{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 32px;
+  color: var(--text);
+  font-size: clamp(1.85rem, 3.5vw, 2.65rem);
+  font-weight: 600;
+  letter-spacing: -.055em;
+}
+/* Education timeline */
+#journey .journey-timeline{ max-width: 900px; margin-top: 44px; }
+#journey .journey-timeline::before{
+  left: 10px;
+  width: 1px;
+  background: linear-gradient(var(--accent), color-mix(in srgb, var(--accent) 14%, transparent));
+}
+#journey .journey-item{
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 24px;
+  padding-bottom: 58px;
+}
+#journey .journey-dot{
+  width: 13px;
+  height: 13px;
+  margin: 5px 0 0 4px;
+  border: 2px solid var(--accent);
+  background: #0b1118;
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+#journey .journey-content h3{
+  margin-bottom: 7px;
+  color: var(--text);
+  font-size: clamp(1.03rem, 2vw, 1.22rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+#journey .journey-date{
+  margin: 0 0 16px;
+  color: var(--accent) !important;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+#journey .journey-photo-link{
+  width: min(100%, 620px);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(143,224,208,.12), rgba(255,255,255,.025));
+  box-shadow: 0 12px 35px rgba(0,0,0,.18);
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+#journey .journey-photo-link:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  /* soft glow pooling underneath the photo box */
+  box-shadow:
+    0 6px 18px rgba(0,0,0,.22),
+    0 22px 46px -10px color-mix(in srgb, var(--accent) 34%, transparent),
+    0 30px 70px -18px color-mix(in srgb, var(--accent) 26%, transparent);
+}
+#journey .journey-photo-link img{
+  display: block;
+  width: 100%;
+  max-height: 330px;
+  object-fit: cover;
+}
+#journey .journey-contents{ margin-top: 15px; max-width: 700px; }
+#journey .journey-contents h4{
+  color: var(--text-dim);
+  font-size: .88rem;
+  font-weight: 400;
+  line-height: 1.75;
+}
+/* Cards */
+.skills-header{ display: flex; align-items: center; gap: 24px; }
+.skills-header .section-title{ flex: 0 0 auto; }
+.skills-title-line{ flex: 1; height: 1px; margin-top: -20px; background: linear-gradient(90deg, var(--line), transparent); }
+.skills-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.skill-card{
+  min-width: 0;
+  padding: 22px 24px;
+  border: 1px solid rgba(235, 243, 250, 0.15);
+  border-radius: 18px;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.022) 48%, rgba(255, 255, 255, 0.04)),
+    color-mix(in srgb, var(--accent) 3%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 14px 34px rgba(0, 0, 0, 0.32);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+.skill-card::before{ display: none; }
+.skill-card:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 52%, transparent);
+  background:
+    linear-gradient(165deg, color-mix(in srgb, var(--accent) 11%, transparent), rgba(255, 255, 255, 0.02) 55%, color-mix(in srgb, var(--accent) 5%, transparent));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 24px 48px rgba(0, 0, 0, 0.42);
+}
+.skill-card h3{
+  margin-bottom: 7px;
+  color: var(--text) !important;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  text-shadow: none;
+}
+.skill-card p{
+  color: var(--text-dim) !important;
+  font-size: .9rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+.skill-card .skill-arrow{ color: var(--accent); }
+/* Clickable skill cards refined SVG chip arrow */
+#skills .skill-card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 92px;
+  padding: 20px 22px;
+}
+#skills .skill-card h3{ margin: 0; font-size: 1.05rem; }
+#skills .skill-info{ min-width: 0; }
+#skills .skill-card .skill-arrow{
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(235, 243, 250, 0.14);
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--text-dim);
+  line-height: 0;
+  transition:
+    transform .28s cubic-bezier(.22, .61, .36, 1),
+    background .28s ease,
+    border-color .28s ease,
+    color .28s ease,
+    box-shadow .28s ease;
+}
+#skills .skill-card .skill-arrow svg{ display: block; transition: transform .28s cubic-bezier(.22, .61, .36, 1); }
+#skills .skill-card:hover .skill-arrow{
+  transform: translateX(3px);
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent);
+  color: #07100f;
+}
+#skills .skill-card:hover .skill-arrow svg{ transform: translateX(1px); }
+#skills .skill-card:hover{ transform: translateY(-3px); }
+.course-card{ height: 100%; }
+/* Courses: 1x3 ek hi line me 3 compact cards */
+.courses-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+.courses-grid .skill-card{ padding: 17px 18px; }
+.courses-grid .skill-card h3{ font-size: .92rem; }
+.courses-grid .skill-card p{ font-size: .8rem; line-height: 1.55; }
+/* Soft Skills: original 2-column grid (7 cards) */
+#soft-skills .skills-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.courses-grid, .soft-skills-grid{ align-items: stretch; }
+#internships .internships-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 16px !important; }
+#internships .internships-grid .skill-card{ height: 100%; }
+.internship-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 13px;
+  color: var(--accent);
+  font-size: .8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.internship-link::after{ content: "↗"; transition: transform .2s ease; }
+.internship-link:hover::after{ transform: translate(2px, -2px); }
+.placeholder-note{
+  max-width: none;
+  padding: 20px 22px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+  color: var(--text-dim) !important;
+  font-size: .86rem;
+  font-style: normal;
+}
+/* Beyond card / transition same thin divider line sections use,
+   so the card and the achievements section read as separate blocks */
+.verse-card-wrapper{
+  margin: 0 auto 26px;
+  padding-top: clamp(64px, 8vw, 100px);
+  border-top: 1px solid var(--line);
+}
+.verse-card-wrapper .beyond-verse-card{
+  position: relative;
+  width: min(100%, 760px);
+  min-height: 118px;
+  padding: 26px 30px;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--accent) 13%, transparent), transparent 52%),
+    linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+.verse-card-wrapper .beyond-verse-card::after{
+  position: absolute;
+  right: 44px;
+  bottom: -72px;
+  width: 150px;
+  height: 150px;
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(255,255,255,.018), 0 0 0 38px rgba(255,255,255,.012);
+  content: "";
+  pointer-events: none;
+}
+.verse-card-wrapper .beyond-verse-card:hover{
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 38%, transparent);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 5%, transparent), rgba(255,255,255,.015));
+}
+.beyond-card-eyebrow{
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.verse-card-wrapper .beyond-verse-card h3{ color: var(--text) !important; font-size: 1.22rem; letter-spacing: -.03em; }
+.verse-card-wrapper .beyond-verse-card p{ margin-top: 5px; color: var(--text-dim) !important; font-size: .86rem; }
+.verse-card-wrapper .beyond-verse-card .skill-arrow{
+  flex-shrink: 0;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-dim);
+  transition: transform .25s ease, background .25s ease, border-color .25s ease, color .25s ease;
+}
+.verse-card-wrapper .beyond-verse-card:hover .skill-arrow{
+  transform: translateX(4px);
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #07100f;
+}
+/* Skills detail pages premium interior */
+.skill-detail-page{
+  position: relative;
+  width: min(1000px, calc(100% - 48px));
+  padding: 54px 0 90px;
+}
+.skill-detail-page::before{
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 720px;
+  height: 360px;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 8%, transparent), transparent 72%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+.skill-category-nav{
+  display: flex;
+  gap: 8px;
+  max-width: 100%;
+  margin: 30px auto 0;
+  padding: 4px 0 12px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+.skill-nav-item{
+  flex: 0 0 auto;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  color: var(--text-dim) !important;
+  font-size: .75rem;
+  text-decoration: none;
+}
+.skill-nav-item.active,
+.skill-nav-item:hover{ border-color: color-mix(in srgb, var(--accent) 45%, transparent); background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent) !important; }
+.skill-detail-header{ position: relative; padding: 60px 0 44px; }
+.skill-detail-header::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 64px;
+  height: 2px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.skill-detail-label{
+  color: var(--accent) !important;
+  text-shadow: none;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+.skill-detail-header h1{ color: var(--text) !important; text-shadow: none; font-size: clamp(2.2rem, 6vw, 3.7rem); letter-spacing: -.06em; }
+.skill-detail-header p{ max-width: 52ch; margin: 10px auto 0; color: color-mix(in srgb, var(--text-dim) 68%, var(--text)) !important; font-size: .96rem; }
+.language-list{ max-width: 780px; gap: 18px; }
+.language-card{
+  padding: 28px 32px;
+  border-color: rgba(235, 243, 250, 0.15);
+  border-radius: 20px;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02) 48%, rgba(255, 255, 255, 0.038)),
+    color-mix(in srgb, var(--accent) 3%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 14px 34px rgba(0, 0, 0, 0.32);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+.language-card::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 26px;
+  bottom: 26px;
+  width: 3px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, var(--accent), color-mix(in srgb, var(--accent) 22%, transparent));
+  opacity: .85;
+}
+.language-card:hover{
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  background:
+    linear-gradient(165deg, color-mix(in srgb, var(--accent) 10%, transparent), rgba(255, 255, 255, 0.02) 55%, color-mix(in srgb, var(--accent) 4%, transparent));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 22px 44px rgba(0, 0, 0, 0.4);
+}
+.language-number{
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, transparent);
+  border-radius: 15px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent) 5%, transparent));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 14px color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--accent) !important;
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  line-height: 1;
+}
+.language-content{ min-width: 0; }
+.language-content h2{
+  position: relative;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  color: var(--text) !important;
+  text-shadow: none;
+  font-size: 1.34rem;
+  letter-spacing: -.02em;
+}
+.language-content h2::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 36px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: .65;
+}
+.language-content p{
+  color: color-mix(in srgb, var(--text-dim) 68%, var(--text)) !important;
+  font-size: .95rem;
+  line-height: 1.75;
+}
+.coming-language{ opacity: .78; }
+.coming-language h2{ color: var(--text-dim) !important; }
+.coming-language::before{ opacity: .3; }
+.skill-page-navigation{
+  max-width: 780px;
+  margin: 52px auto 0;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.skill-page-btn{
+  padding: 11px 22px;
+  border-color: rgba(235, 243, 250, 0.16);
+  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+  color: var(--text) !important;
+  font-size: .82rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: transform .22s ease, border-color .22s ease, background .22s ease, color .22s ease;
+}
+.skill-page-btn:hover{
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  color: var(--accent) !important;
+  box-shadow: none;
+}
+/* Static iframe ke neeche ka duplicate animated layer flicker source tha */
+.skill-overlay{ background: hsl(214, 24%, 7%); }
+.skill-overlay-close{
+  display: flex !important;
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background: rgba(8,13,19,.78);
+  color: var(--text);
+}
+/* Beyond My Coding Verse editorial collections */
+.beyond-page{
+  background: hsl(var(--dyn-hue) var(--dyn-sat) var(--dyn-bg-l));
+}
+/* Left-aligned masthead instead of a centred glowing hero */
+.beyond-page .beyond-hero{
+  min-height: 0;
+  padding: 96px 0 74px;
+  border-bottom-color: var(--line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 4%, transparent), transparent 62%);
+}
+.beyond-hero-glow{ display: none; }
+.beyond-hero-content{
+  width: min(var(--maxw), 100%);
+  margin: 0 auto;
+  padding: 0 28px;
+  text-align: left;
+}
+.beyond-eyebrow{
+  margin-bottom: 20px;
+  color: var(--accent) !important;
+  font-size: .68rem;
+  letter-spacing: .3em;
+}
+.beyond-eyebrow::before,
+.beyond-eyebrow::after{ content: none; }
+.beyond-hero h1{
+  max-width: 900px;
+  color: var(--text) !important;
+  font-size: clamp(2.5rem, 6.4vw, 5.1rem);
+  line-height: .99;
+  letter-spacing: -.055em;
+}
+.beyond-hero h1 span{ color: var(--accent) !important; text-shadow: none; }
+.beyond-hero p{
+  max-width: 62ch;
+  margin: 22px 0 0;
+  color: var(--text-dim) !important;
+}
+/* (Collection chips and the back link replaced by the sticky nav + the overlay X.) */
+.beyond-main{ max-width: var(--maxw); padding: 0 28px 70px; }
+/* Sections header row with hairline rule and a count chip */
+.verse-section{ padding: 62px 0; border-top-color: var(--line); scroll-margin-top: 74px; }
+.verse-section h3{
+  margin: 0 0 24px;
+  color: var(--text);
+  font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+  letter-spacing: -.035em;
+}
+.verse-section::before{ display: none; }
+/* Poster grid quiet gallery, 4-up on wide screens */
+.verse-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.verse-card{
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #0d131a;
+  box-shadow: none;
+  transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.verse-card:hover{
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  box-shadow: 0 16px 34px rgba(0,0,0,.3);
+}
+.verse-card::after{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(2, 6, 10, .42);
+  content: "";
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.verse-card:hover::after{ opacity: 1; }
+.verse-card img{ filter: saturate(.9) brightness(.97); transition: filter .3s ease, transform .35s ease; }
+.verse-card:hover img{ filter: none; }
+/* Name stays hidden until hover - then rises out of the fade. */
+/* Name appears dead-centre on hover (zoom + black shade already on ::after). */
+.verse-card .verse-card-name{
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0 16px;
+  background: none;
+  color: #f6f8fa;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-align: center;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, .7);
+  opacity: 0;
+  transform: none;
+  transition: opacity .3s ease;
+}
+.verse-card:hover .verse-card-name{ opacity: 1; transform: none; }
+@media (hover: none){
+.verse-card::after{ opacity: 0; }
+.verse-card .verse-card-name{
+    opacity: 1;
+    background: rgba(2, 6, 10, .32);
+  }
+
+}
+/* Sports line as a pull-quote */
+.verse-quote{
+  max-width: 620px;
+  margin: 0 0 26px;
+  padding: 4px 0 4px 18px;
+  border-left: 2px solid var(--accent);
+  color: var(--text-dim) !important;
+  font-size: .98rem;
+  font-style: normal;
+  line-height: 1.75;
+}
+/* Hobbies static editorial cards, numbered. Informational only:
+   deliberately NO hover effect and default cursor. */
+.hobbies-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.hobby-card{
+  position: relative;
+  padding: 26px 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+  box-shadow: none;
+  cursor: default;
+  transition: none;
+}
+.hobby-card::before{
+  position: absolute;
+  top: -1px;
+  left: 28px;
+  width: 26px;
+  height: 2px;
+  background: var(--accent);
+  content: "";
+}
+/* Hobbies static editorial cards. Informational only: NO hover effect.
+   Each card carries a heavily tinted themed photo so the copy stays crisp
+   but the theme is still readable at a glance. */
+.hobby-card{ overflow: hidden; }
+.hobby-card h4{ color: var(--text) !important; font-size: 1rem; letter-spacing: -.01em; }
+.hobby-card p{ margin: 9px 0 0; color: var(--text-dim) !important; font-size: .85rem; line-height: 1.75; }
+@media (max-width: 1024px){
+.hobbies-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+}
+.hobby-bg{
+  position: absolute;
+  inset: 0;
+  background-image: var(--hbg, none);
+  background-size: cover;
+  background-position: var(--hbg-pos, center);
+  opacity: var(--hbg-o, .27);
+  filter: saturate(.82) contrast(1.03);
+  pointer-events: none;
+}
+.hobby-tint{
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(168deg,
+      rgba(8, 12, 18, 0.88) 0%,
+      rgba(8, 12, 18, 0.6) 45%,
+      rgba(8, 12, 18, 0.92) 100%);
+  pointer-events: none;
+}
+.hobby-body{ position: relative; z-index: 1; }
+/* Thank you centred accent tick instead of a full-width line */
+/* Greyish divider baaki sections jaisi hi, hobbies ke baad */
+.thank-you{
+  padding: 86px 0 46px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+}
+.thank-you::before{
+  display: block;
+  width: 52px;
+  height: 2px;
+  margin: 0 auto 30px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  content: "";
+}
+.thank-eyebrow{
+  display: block;
+  margin-bottom: 14px;
+  color: var(--accent);
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+}
+.thank-you h2{
+  max-width: 640px;
+  margin: 0 auto;
+  color: var(--text);
+  letter-spacing: -.03em;
+}
+.thank-you p{
+  max-width: 520px;
+  margin: 14px auto 0;
+  color: var(--text-dim) !important;
+}
+/* ==========================================================
+   VERSE CINEMATIC themed opening for every title
+   --v-accent is set per-item by verse.js (VERSE_THEMES).
+   ========================================================== */
+.verse-detail{
+  z-index: 100;
+  gap: clamp(30px, 6vw, 80px);
+  padding: clamp(22px, 5vw, 64px);
+  background:
+    radial-gradient(130% 140% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.55)),
+    radial-gradient(85% 110% at 26% 28%, color-mix(in srgb, var(--v-accent, var(--accent)) 13%, transparent), transparent 56%),
+    radial-gradient(70% 90% at 84% 80%, color-mix(in srgb, var(--v-accent, var(--accent)) 8%, transparent), transparent 62%),
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.4px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='170' height='170'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    hsl(var(--dyn-hue) 26% 4.5%);
+  background-size: auto, auto, auto, 26px 26px, 170px 170px, auto;
+    /* NOTE: yahan pehle backdrop-filter: blur(14px) tha. Upar ka background
+       (last layer me hsl(...)) poora OPAQUE hai matlab blur ka result kabhi
+       dikhta hi nahi tha, par GPU har frame uska hisaab karta rehta tha.
+       Video chalte waqt ye sabse mehnga bekaar kaam tha. Hata diya. */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+/* Giant ghost initial of the current title - fills the backdrop quietly */
+.verse-detail::after{
+  position: absolute;
+  right: clamp(14px, 4vw, 64px);
+  bottom: -5%;
+  z-index: 0;
+  color: color-mix(in srgb, var(--v-accent, var(--accent)) 10%, transparent);
+  content: attr(data-initial);
+  font-size: clamp(180px, 42vh, 460px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.verse-detail.cinematic-in::after{ animation: vWatermark 1.6s ease 0.2s both; }
+@keyframes vWatermark{
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* keep real content above the ghost letter */
+.verse-detail-media,
+.verse-detail-text{ position: relative; z-index: 1; }
+.verse-close{ z-index: 2; }
+/* Accent sweep across the backdrop as the opening animation starts */
+.verse-detail::before{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, color-mix(in srgb, var(--v-accent, var(--accent)) 14%, transparent) 50%, transparent 70%);
+  content: "";
+  transform: translateX(-101%);
+  pointer-events: none;
+}
+.verse-detail.cinematic-in::before{ animation: vSweep 1.1s cubic-bezier(.55, .06, .28, .99) .1s both; }
+.verse-detail-media{
+  position: relative;
+  width: auto;
+  height: clamp(320px, 62vh, 560px);
+  aspect-ratio: 2 / 3; /* identical frame size for every card */
+  border: 1px solid color-mix(in srgb, var(--v-accent, var(--accent)) 28%, rgba(255,255,255,.14));
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 40px 90px rgba(0,0,0,.55),
+    0 0 70px -18px color-mix(in srgb, var(--v-accent, var(--accent)) 45%, transparent);
+}
+/* soft themed glow pooling behind the poster */
+.verse-detail-media::after{
+  position: absolute;
+  inset: -40px;
+  z-index: -1;
+  background: color-mix(in srgb, var(--v-accent, var(--accent)) 22%, transparent);
+  filter: blur(60px);
+  content: "";
+}
+.verse-detail-media img{ width: 100%; height: 100%; object-fit: cover; }
+.verse-detail-text{
+  flex: 0 0 auto;
+  width: min(500px, 44vw); /* fixed column width - keeps the nav row identical on every card */
+}
+/* Reserved space keeps tag/title/description blocks - and therefore the
+   Previous/Next row - at the exact same position on every card. */
+.verse-detail-text h4{ min-height: 2.2em; }
+.verse-detail-text p{ min-height: 3.8em; }
+.verse-navigation{ margin-top: 28px; }
+.verse-detail-tag{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--v-accent, var(--accent)) !important;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.verse-detail-tag::before{ width: 26px; height: 1px; background: var(--v-accent, var(--accent)); content: ""; }
+.verse-detail-text h4{
+  margin: 14px 0 0;
+  color: #f5f7f8;
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  letter-spacing: -.045em;
+  line-height: 1.02;
+}
+.verse-detail-text p{
+  margin: 18px 0 0;
+  color: rgba(229,236,243,.8) !important;
+  font-size: .95rem;
+  line-height: 1.85;
+}
+/* --- opening animation (restarted via .cinematic-in on every open) --- */
+.verse-detail.cinematic-in .verse-detail-media{
+  animation: vMediaIn .8s cubic-bezier(.2, .7, .2, 1) both;
+}
+.verse-detail.cinematic-in .verse-detail-media img{
+  animation: vImgIn 1.3s cubic-bezier(.2, .6, .25, 1) both;
+}
+.verse-detail.cinematic-in .verse-detail-tag{ animation: vTextIn .5s ease .38s both; }
+.verse-detail.cinematic-in .verse-detail-text h4{ animation: vTextIn .6s cubic-bezier(.2, .7, .2, 1) .48s both; }
+.verse-detail.cinematic-in .verse-detail-text p{ animation: vTextIn .6s ease .6s both; }
+.verse-detail.cinematic-in .verse-navigation{ animation: vTextIn .55s ease .74s both; }
+.verse-detail.cinematic-in .verse-close{ animation: vTextIn .5s ease .8s both; }
+@keyframes vMediaIn{
+  from { clip-path: inset(0 100% 0 0); transform: translateX(-26px); }
+  to { clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+@keyframes vImgIn{
+  from { transform: scale(1.09); }
+  to { transform: scale(1); }
+}
+@keyframes vTextIn{
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes vSweep{
+  from { transform: translateX(-101%); opacity: 1; }
+  to { transform: translateX(101%); opacity: 0; }
+}
+.verse-close{
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  background: rgba(0,0,0,.4);
+  color: #f4f6f8;
+  font-size: 1.15rem;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.verse-close:hover{ background: var(--v-accent, var(--accent)); border-color: var(--v-accent, var(--accent)); color: #07100f; }
+/* --- card-to-card navigation: edge-pinned circular buttons.
+       Previous on the LEFT edge, Next on the RIGHT edge, vertically centred.
+       Identical geometry on every card; first card hides Previous, last card
+       hides Next (at-start/at-end keep the slot via visibility). --- */
+.verse-navigation{
+  position: absolute;
+  left: clamp(12px, 2.2vw, 30px);
+  right: clamp(12px, 2.2vw, 30px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+.verse-prev, .verse-next{
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(8, 13, 19, 0.62);
+  backdrop-filter: blur(10px) saturate(130%);
+  color: #eaf0f4 !important;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.verse-prev:hover, .verse-next:hover{
+  background: var(--v-accent, var(--accent));
+  border-color: var(--v-accent, var(--accent));
+  color: #07100f !important;
+  transform: translateY(-2px);
+}
+.verse-prev svg, .verse-next svg{ display: block; }
+.verse-detail.at-start .verse-prev{ visibility: hidden; }
+.verse-detail.at-end .verse-next{ visibility: hidden; }
+/* --- trailer stage: official trailer as the cinematic background.
+       Only applies when the open card carries a `trailer` video id
+       (.has-trailer); cards without one keep the classic poster layout. --- */
+.verse-trailer-bg{ position: absolute; inset: 0; z-index: 0; overflow: hidden; display: none; }
+.verse-detail.has-trailer .verse-trailer-bg{ display: block; }
+/* YT.Player holder iframe replace hone se pehle bhi full-bleed */
+.verse-trailer-bg .vt-yt{
+  position: absolute;
+  inset: 0;
+}
+.verse-trailer-bg iframe{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* extra width pushes YouTube's corner chrome (logo / more-videos) off-screen */
+  width: max(calc(100vw + 300px), calc(177.78vh + 300px));
+  height: max(100vh, 56.25vw);
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+.verse-trailer-still{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.07);
+  filter: blur(14px) brightness(0.72) saturate(115%);
+}
+/* user ki local trailer video (trailers/ slot se) crisp, full cover */
+.verse-trailer-bg video.verse-trailer-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* scale(1.02) hata diya wo har frame video ko 2% zoom karke
+     RESAMPLE kar raha tha, jisse picture thodi soft ho jati hai aur
+     GPU par extra load padta hai. translateZ(0) sirf itna karta hai ki
+     video apni alag GPU layer par composite ho picture crisp rehti hai
+     aur playback smooth. */
+  transform: translateZ(0);
+  background: #04080c;
+}
+.verse-trailer-scrim{
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  background:
+    linear-gradient(0deg,
+      rgba(4, 8, 12, 0.92) 0%,
+      rgba(4, 8, 12, 0.68) 20%,
+      rgba(4, 8, 12, 0.28) 42%,
+      rgba(4, 8, 12, 0.1) 68%,
+      rgba(4, 8, 12, 0.22) 100%);
+  pointer-events: none;
+}
+.verse-detail.has-trailer .verse-trailer-scrim{ display: block; }
+/* trailer cards: hobbies-card feel koi poster nahi, koi box nahi.
+   Sirf trailer background + uske upar seedha hero text (bottom-left) */
+.verse-detail.has-trailer .verse-detail-media{ display: none; }
+.verse-detail.has-trailer{
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-bottom: clamp(110px, 16vh, 160px);
+}
+.verse-detail.has-trailer .verse-detail-text{
+  max-width: min(640px, 58vw);
+  border: none;
+  background: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+.verse-detail.has-trailer .verse-detail-text h4{
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  letter-spacing: -.03em;
+  text-shadow: 0 2px 26px rgba(0, 0, 0, .9), 0 1px 4px rgba(0, 0, 0, .6);
+}
+.verse-detail.has-trailer .verse-detail-text p{
+  color: rgba(238, 244, 248, 0.92) !important;
+  font-size: 1rem;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, .95), 0 1px 3px rgba(0, 0, 0, .55);
+}
+.verse-detail.has-trailer .verse-detail-tag{ text-shadow: 0 1px 12px rgba(0, 0, 0, .8); }
+/* narrow desktop windows: edge buttons icon-only (safe rakne ke liye) */
+@media (max-width: 1100px) and (min-width: 861px){
+.verse-prev, .verse-next{ width: 52px; padding: 0; justify-content: center; }
+.verse-prev span, .verse-next span{ display: none; }
+
+}
+/* trailer sound toggle */
+/* trailer fade-in as part of the opening animation */
+.verse-detail.cinematic-in .verse-trailer-bg{ animation: vTrailerIn .9s ease .12s both; }
+@keyframes vTrailerIn{
+  from { opacity: 0; transform: scale(1.045); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* trailer stage on phones: trailer on top, readable panel at the bottom.
+   Extra bottom padding keeps the panel clear of the always-visible music player. */
+@media (max-width: 860px){
+.verse-detail.has-trailer{
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 0;
+    padding: 0 18px calc(182px + env(safe-area-inset-bottom));
+  }
+.verse-detail.has-trailer .verse-trailer-scrim{
+    background:
+      linear-gradient(0deg,
+        rgba(4, 8, 12, 0.96) 0%,
+        rgba(4, 8, 12, 0.82) 30%,
+        rgba(4, 8, 12, 0.32) 58%,
+        rgba(4, 8, 12, 0.06) 100%);
+  }
+.verse-detail.has-trailer .verse-detail-text{ max-width: 100%; padding: 0; }
+.verse-detail.has-trailer .verse-detail-text h4{ font-size: 1.3rem; min-height: 0; }
+.verse-detail.has-trailer .verse-detail-text p{ font-size: .84rem; min-height: 0; }
+.verse-navigation{
+    top: auto;
+    bottom: calc(104px + env(safe-area-inset-bottom));
+    transform: none;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+.verse-prev, .verse-next{ min-height: 42px; padding: 0 14px; font-size: .64rem; }
+
+}
+/* The home-page player remains visible above the Beyond iframe; suppress only the duplicate widget inside it. */
+/* Music player a lighter glass panel with a Spotify-style progress
+   row underneath the main row; its live theme still follows the playlist */
+/* Row 1 existing controls stay exactly as they were */
+/* Row 2 elapsed time | thin bar with white position line | total time */
+/* Control icons match the white glyph buttons */
+/* Unevenly bouncing "now playing" bars in the song list */
+/* Bars freeze (half-height) while the player is paused */
+/* Repeat button click pe ek baar clockwise spin, aur repeat ON hote hi
+   chhota "1" badge (repeat-one), taaki samajh aaye ye song loop me hai */
+@keyframes mpRepeatSpin{
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+/* EQ bars: catalog item ke bilkul rightmost edge pe */
+.verse-card.no-image::before{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 58%);
+  color: color-mix(in srgb, var(--accent) 72%, white);
+  content: attr(data-fallback);
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -.08em;
+  opacity: .8;
+}
+.verse-card.no-image .verse-card-name{ z-index: 1; }
+/* Image file missing? <img> ko poora hide karo warna browser apna
+   broken-image icon + alt text card ke upar chipka deta hai (bhadda
+   lagta hai). Peeche ::before wala bada letter + glow sambhal leta hai,
+   aur neeche gradient strip pe card ka naam already aa jata hai. */
+.verse-card.no-image img{ display: none; }
+.verse-detail-media.no-detail-image{
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 23%, transparent), transparent 58%), linear-gradient(145deg, #15212c, #090e14);
+}
+.verse-detail-media.no-detail-image::after{
+  color: color-mix(in srgb, var(--accent) 72%, white);
+  content: attr(data-fallback);
+  font-family: var(--font-display, sans-serif);
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: -.08em;
+}
+.journey-photo-link.media-missing{
+  display: grid !important;
+  min-height: 170px;
+  place-items: center;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 55%), linear-gradient(135deg, #15212c, #090e14);
+}
+.journey-photo-link.media-missing img{ display: none; }
+.journey-photo-link.media-missing::after{
+  color: var(--text-dim);
+  content: attr(data-fallback);
+  font-size: .8rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+/* Footer premium colophon */
+.site-footer{
+  position: relative;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  /* extra bottom space so the floating music tab never covers it */
+  padding: 34px 28px 118px;
+  color: rgba(228,236,242,.5);
+  font-size: .72rem;
+}
+/* accent hairline jo kinaron pe fade hoti hai */
+.site-footer::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 28px;
+  left: 28px;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--accent) 38%, var(--line)) 16%,
+    color-mix(in srgb, var(--accent) 38%, var(--line)) 84%,
+    transparent);
+}
+.site-footer-inner{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.footer-brand{
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
+}
+.footer-mark{
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  border-radius: 12px;
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--accent) 9%, transparent), transparent 62%),
+    rgba(8, 13, 19, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  color: var(--accent);
+  font-family: var(--font-display, "Space Grotesk", sans-serif);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.footer-id{
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.footer-name{
+  color: var(--text);
+  font-size: .84rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.footer-tag{
+  color: rgba(228, 236, 242, .44);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.footer-copy{
+  flex-shrink: 0;
+  color: rgba(228, 236, 242, .46);
+  font-size: .7rem;
+  letter-spacing: .05em;
+}
+.footer-copy #footerYear{ color: var(--accent); font-weight: 600; }
+.site-footer a{ color: var(--text-dim); text-decoration: none; }
+.site-footer a:hover{ color: var(--accent); }
+@media (max-width: 700px){
+.site-footer-inner{ flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+.footer-brand{ flex-direction: column; gap: 10px; }
+.footer-id{ align-items: center; }
+.footer-tag{ white-space: normal; }
+
+}
+/* Responsive layout */
+@media (max-width: 900px){
+.site-header{ min-height: 68px; padding-inline: 24px; }
+.main-nav{ gap: clamp(10px, 2vw, 16px); margin-inline: 10px; }
+.main-nav a{ font-size: clamp(.66rem, 1.55vw, .78rem); letter-spacing: 0; }
+.hero-about{ gap: 42px; }
+.verse-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; }
+.skills-grid{ gap: 13px; }
+
+}
+@media (max-width: 720px){
+html{ scroll-padding-top: 74px; }
+.site-header{ min-height: 64px; padding-inline: 14px; }
+/* Nav never disappears - links wrap into two compact rows and
+     shrink gracefully on small screens */
+.main-nav{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0;
+    column-gap: 13px;
+    margin: 8px 0;
+    width: 100%;
+  }
+.main-nav a{ padding: 5px 0; font-size: .74rem; }
+.welcome{ padding: 96px 24px 85px; }
+.welcome-inner{ text-align: center; }
+.welcome-eyebrow, .welcome-subtitle, .welcome-cta{ margin-right: auto; margin-left: auto; }
+.welcome-name{ font-size: clamp(2.8rem, 11.8vw, 5.6rem); letter-spacing: -.075em; }
+.welcome-subtitle{ max-width: 38ch; }
+.welcome::after{ display: none; }
+.hero-about{ grid-template-columns: 1fr; gap: 35px; padding: 78px 22px 90px; }
+.hero-about::before{ right: 22px; left: 22px; }
+.hero-left{ display: grid; grid-template-columns: 1fr; }
+.hero-right{ padding: 23px; }
+#main-showcase{ padding: 0 22px 70px; }
+.showcase-section{ padding: 64px 0; }
+.skills-grid{ grid-template-columns: 1fr; gap: 12px; }
+#internships .internships-grid{ grid-template-columns: 1fr !important; }
+.section-title{ margin-bottom: 25px; }
+.verse-card-wrapper{ padding-inline: 0; }
+.verse-card-wrapper .beyond-verse-card{ width: 100%; }
+.beyond-main{ padding-inline: 22px; }
+.verse-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.hobbies-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.verse-detail{ flex-direction: column; align-items: center; gap: 18px; padding: 54px 20px 25px; overflow-y: auto; }
+.verse-detail-media{ height: auto; width: min(72vw, 320px); }
+.verse-detail-text{ width: min(92vw, 520px); }
+body.verse-card-open .skill-overlay-close{ display: none; }
+.verse-detail-media{ width: min(54vw, 250px); max-height: 42vh; }
+.verse-detail-text{ width: min(100%, 520px); text-align: center; }
+.verse-detail-text h4{ margin: 7px 0 10px; }
+.verse-detail-text p{ margin-bottom: 8px; font-size: .88rem; }
+.verse-navigation{ justify-content: center; margin-top: 13px; }
+.verse-nav-arrows{ justify-content: center; margin-top: 0; }
+.skill-category-nav{ margin-top: 22px; }
+.skill-detail-header{ padding: 48px 0 35px; }
+.language-card{ padding: 21px; }
+.site-footer-inner{ flex-direction: column; align-items: center; }
+
+}
+@media (max-width: 480px){
+.main-nav{ column-gap: 10px; }
+.main-nav a{ font-size: .69rem; }
+
+}
+@media (max-width: 440px){
+.brand-name{ font-size: .66rem; }
+.brand-mark{ width: 34px; height: 34px; }
+.contact-links{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.contact-link{ padding-inline: 8px; font-size: .7rem; }
+.lang-name{ width: 66px; }
+.verse-grid{ gap: 9px; }
+.verse-card{ border-radius: 14px; }
+.verse-card .verse-card-name{ padding: 30px 10px 11px; font-size: .78rem; }
+.hobbies-grid{ grid-template-columns: 1fr; }
+
+}
+@media (prefers-reduced-motion: reduce){
+html{ scroll-behavior: auto; }
+*, *::before, *::after{ animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+
+}
+/* Welcome screen ka bada sphere/ring hatao */
+.welcome::before{
+  display: none !important;
+}
+/* Welcome screen ka decorative sphere/ring hatao */
+#welcome::before,
+#welcome::after{
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+/* Sticky section navigation plain text links with a light bar, like
+   the main page's top nav. Sits under the hero, pins to the top on scroll. */
+.beyond-nav{
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, hsl(var(--dyn-hue) var(--dyn-sat) var(--dyn-bg-l)) 88%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+}
+.beyond-nav-inner{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 2.2vw, 28px);
+  max-width: var(--maxw);
+  min-height: 52px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+.beyond-nav a{
+  position: relative;
+  padding: 15px 0;
+  color: rgba(230, 237, 244, 0.66) !important;
+  font-size: 0.79rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+.beyond-nav a::after{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+.beyond-nav a:hover,
+.beyond-nav a.active{ color: var(--text) !important; }
+.beyond-nav a:hover::after,
+.beyond-nav a.active::after{ transform: scaleX(1); }
+/* While a verse card is open, the page-level close button steps aside so
+   only the card's own X is visible. It fades back in when the card closes. */
+body.verse-card-open .skill-overlay-close{
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: scale(0.85);
+}
+/* Beyond page small-screen tuning (kept last so it wins cleanly) */
+@media (max-width: 700px){
+.verse-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hobbies-grid{ grid-template-columns: 1fr; }
+.beyond-page .beyond-hero{ padding: 68px 0 56px; }
+.beyond-hero-content{ padding: 0 20px; }
+.beyond-main{ padding: 0 20px 60px; }
+.beyond-nav-inner{ gap: 14px; min-height: 46px; padding: 0 18px; }
+.beyond-nav a{ padding: 13px 0; font-size: .73rem; }
+
+}
+/* ==========================================================
+   DYNAMIC COLOUR SYNCED CROSS-FADE
+   Wash layers background cross-fade karte hain; yeh registration
+   + .theme-anim transition saare accent/text/nav vars ko USI 1s me
+   USI easing se fade karta hai poora page EK coherent unit me
+   colour badalta hai. Kabhi koi element dusre se aage na ho.
+   ========================================================== */
+@property --dyn-hue{ syntax: "<number>"; inherits: true; initial-value: 214; }
+@property --dyn-sat{ syntax: "<percentage>"; inherits: true; initial-value: 24%; }
+@property --dyn-bg-l{ syntax: "<percentage>"; inherits: true; initial-value: 7%; }
+@property --text{ syntax: "<color>"; inherits: true; initial-value: #F2F5F8; }
+@property --text-dim{ syntax: "<color>"; inherits: true; initial-value: #AAB6C4; }
+@property --accent{ syntax: "<color>"; inherits: true; initial-value: #8FE0D0; }
+@property --border{ syntax: "<color>"; inherits: true; initial-value: rgba(143,224,208,0.22); }
+@property --dyn-text{ syntax: "<color>"; inherits: true; initial-value: #F2F5F8; }
+@property --dyn-text-dim{ syntax: "<color>"; inherits: true; initial-value: #AAB6C4; }
+@property --dyn-accent{ syntax: "<color>"; inherits: true; initial-value: #8FE0D0; }
+@property --dyn-border{ syntax: "<color>"; inherits: true; initial-value: rgba(143,224,208,0.22); }
+@property --accent-soft{ syntax: "<color>"; inherits: true; initial-value: rgba(143,224,208,0.14); }
+html.theme-anim{
+  transition:
+    --dyn-hue 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-sat 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-bg-l 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --text 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --text-dim 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --accent 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --border 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-text 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-text-dim 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-accent 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --dyn-border 1s cubic-bezier(0.45, 0.05, 0.55, 0.95),
+    --accent-soft 1s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+/* ==========================================================
+   TWEEN WINDOW element transitions neutral
+   .theme-anim ke 1s me saari element-level transitions off:
+   har colour sirf registered-var glide se hi aata hai. Chase
+   (0.2s element transitions jo animating vars ko dobara smooth
+   karti thin) = shimmer/flicker ab structurally impossible.
+   Class hatate hi hover/click transitions wapas aa jaate hain.
+   ========================================================== */
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after{
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+/* ==========================================================
+   BLUEPRINT ART technical cards + section ambience
+   Sab art accent-tinted hai (mask technique) colour engine
+   ke saath hue drift karti hai. Bilkul subtle, professional.
+   ========================================================== */
+/* ---- Technical skill cards: per-card line-art motif ---- */
+#skills .skill-card{
+  overflow: hidden;
+}
+#skills .skill-card::after{
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  width: 132px;
+  height: 84px;
+  transform: translateY(-50%);
+  background: var(--accent);
+  opacity: .085;
+  -webkit-mask: var(--motif) right center / contain no-repeat;
+  mask: var(--motif) right center / contain no-repeat;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+#skills .skill-card:hover::after{ opacity: .2; }
+#skills .skill-info{ position: relative; z-index: 1; }
+#skills .skill-card .skill-arrow{ position: relative; z-index: 1; }
+#skills .skills-grid .skill-card:nth-child(1){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M42 26 20 42l22 16M90 26l22 16-22 16M74 18 58 66'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(2){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='66' cy='15' r='7'/%3E%3Ccircle cx='36' cy='43' r='7'/%3E%3Ccircle cx='96' cy='43' r='7'/%3E%3Ccircle cx='20' cy='70' r='7'/%3E%3Ccircle cx='52' cy='70' r='7'/%3E%3Ccircle cx='80' cy='70' r='7'/%3E%3Ccircle cx='112' cy='70' r='7'/%3E%3Cpath d='M61 20 42 37M71 20 90 37M31 49l-7 14M41 49l7 14M91 49l-7 14M101 49l7 14'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(3){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='14' y='14' width='104' height='56' rx='7'/%3E%3Cpath d='M14 30h104'/%3E%3Ccircle cx='25' cy='22' r='2.2'/%3E%3Ccircle cx='34' cy='22' r='2.2'/%3E%3Ccircle cx='43' cy='22' r='2.2'/%3E%3Cpath d='M26 44h34M26 54h48'/%3E%3Crect x='78' y='40' width='30' height='20' rx='4'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(4){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='24' y='12' width='84' height='17' rx='5'/%3E%3Crect x='24' y='34' width='84' height='17' rx='5'/%3E%3Crect x='24' y='56' width='84' height='17' rx='5'/%3E%3Ccircle cx='35' cy='20.5' r='2.4'/%3E%3Ccircle cx='35' cy='42.5' r='2.4'/%3E%3Ccircle cx='35' cy='64.5' r='2.4'/%3E%3Cpath d='M52 20h42M52 42h42M52 64h42'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(5){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='66' cy='19' rx='34' ry='10'/%3E%3Cpath d='M32 19v45c0 5.5 15.2 10 34 10s34-4.5 34-10V19'/%3E%3Cpath d='M32 35c0 5.5 15.2 10 34 10s34-4.5 34-10M32 50c0 5.5 15.2 10 34 10s34-4.5 34-10'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(6){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='24' cy='42' r='8'/%3E%3Ccircle cx='108' cy='16' r='7'/%3E%3Ccircle cx='108' cy='42' r='7'/%3E%3Ccircle cx='108' cy='68' r='7'/%3E%3Cpath d='M32 42h28M60 42 101 20M60 42h41M60 42l41 22'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(7){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='22' cy='15' r='6'/%3E%3Ccircle cx='22' cy='42' r='6'/%3E%3Ccircle cx='22' cy='69' r='6'/%3E%3Ccircle cx='66' cy='28' r='6'/%3E%3Ccircle cx='66' cy='55' r='6'/%3E%3Ccircle cx='110' cy='42' r='7'/%3E%3Cpath d='M28 18l32 8M28 42h32M28 66l32-8M72 30l32 9M72 53l32-9'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(8){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='30' cy='14' r='7'/%3E%3Ccircle cx='30' cy='70' r='7'/%3E%3Ccircle cx='102' cy='42' r='7'/%3E%3Cpath d='M30 21v42'/%3E%3Cpath d='M37 15c28 0 18 27 58 27'/%3E%3C/svg%3E"); }
+#skills .skills-grid .skill-card:nth-child(9){ --motif: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 84' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='14' y='14' width='104' height='56' rx='7'/%3E%3Cpath d='M14 28h104'/%3E%3Ccircle cx='25' cy='21' r='2.2'/%3E%3Ccircle cx='34' cy='21' r='2.2'/%3E%3Cpath d='M28 40l12 10-12 10M48 60h26'/%3E%3C/svg%3E"); }
+/* ---- Section ambience: ek consistent blueprint language ----
+   Har showcase section me faint accent composition, radial-mask
+   ke saath edges pe fade khali dark gaps ab designed lagte hain. */
+.showcase-section{
+  position: relative;
+}
+.showcase-section::before{
+  display: block;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: .055;
+  -webkit-mask: var(--sec-art) center / min(680px, 82%) auto no-repeat,
+    radial-gradient(70% 85% at 50% 46%, #000 26%, transparent 74%);
+  mask: var(--sec-art) center / min(680px, 82%) auto no-repeat,
+    radial-gradient(70% 85% at 50% 46%, #000 26%, transparent 74%);
+  pointer-events: none;
+}
+/* NOTE: pehla mask layer art hai, doosra radial fade dono milke
+   composition ko center se reveal karte hain. */
+#skills::before,
+#courses::before,
+#internships::before,
+#projects::before,
+#soft-skills::before,
+#achievements::before,
+#journey::before{
+  -webkit-mask: var(--sec-art) center / min(680px, 82%) auto no-repeat;
+  mask: var(--sec-art) center / min(680px, 82%) auto no-repeat;
+}
+#skills .skills-grid,
+.section-body{ position: relative; z-index: 1; }
+/* Journey: art timeline cards ke peeche chhup jati thi use right
+   khali zone me nikaalo aur saaf dikhne layak banao */
+#journey::before{
+  opacity: .13;
+  -webkit-mask: var(--sec-art) center / min(1200px, 94%) auto no-repeat;
+  mask: var(--sec-art) center / min(1200px, 94%) auto no-repeat;
+}
+/* skills: circuit chip + traces */
+#skills{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='250' y='110' width='140' height='80' rx='10'/%3E%3Cpath d='M250 130h-70l-24-24H96'/%3E%3Ccircle cx='90' cy='106' r='4'/%3E%3Cpath d='M250 150h-96'/%3E%3Ccircle cx='148' cy='150' r='4'/%3E%3Cpath d='M250 170h-60l-30 30H90'/%3E%3Ccircle cx='84' cy='200' r='4'/%3E%3Cpath d='M390 130h70l24-24h66'/%3E%3Ccircle cx='556' cy='106' r='4'/%3E%3Cpath d='M390 150h96'/%3E%3Ccircle cx='492' cy='150' r='4'/%3E%3Cpath d='M390 170h60l30 30h70'/%3E%3Ccircle cx='556' cy='200' r='4'/%3E%3Cpath d='M320 42v14M313 49h14'/%3E%3Cpath d='M60 246v14M53 253h14'/%3E%3Cpath d='M580 250v14M573 257h14'/%3E%3C/svg%3E"); }
+/* courses: mortarboard */
+#courses{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M320 88l118 44-118 44-118-44z'/%3E%3Cpath d='M256 152v34c0 11 128 11 128 0v-34'/%3E%3Cpath d='M438 140v44'/%3E%3Ccircle cx='438' cy='194' r='5'/%3E%3Cpath d='M96 74v14M89 81h14'/%3E%3Cpath d='M544 220v14M537 227h14'/%3E%3C/svg%3E"); }
+/* internships: briefcase */
+#internships{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='230' y='104' width='180' height='118' rx='12'/%3E%3Cpath d='M284 104V86a14 14 0 0 1 14-14h44a14 14 0 0 1 14 14v18'/%3E%3Cpath d='M230 150h180'/%3E%3Crect x='302' y='136' width='36' height='26' rx='5'/%3E%3Cpath d='M110 66v14M103 73h14'/%3E%3Cpath d='M540 224v14M533 231h14'/%3E%3C/svg%3E"); }
+/* projects: blueprint frames */
+#projects{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Crect x='150' y='56' width='240' height='150' rx='10' stroke-dasharray='7 7'/%3E%3Crect x='252' y='96' width='240' height='150' rx='10' stroke-dasharray='7 7'/%3E%3Cpath d='M180 96h88M180 118h58'/%3E%3Ccircle cx='556' cy='76' r='4'/%3E%3Cpath d='M84 220v14M77 227h14'/%3E%3Cpath d='M316 30v14M309 37h14'/%3E%3C/svg%3E"); }
+/* soft skills: constellation */
+#soft-skills{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.4' stroke-linecap='round'%3E%3Ccircle cx='120' cy='80' r='4'/%3E%3Ccircle cx='224' cy='140' r='3'/%3E%3Ccircle cx='332' cy='70' r='4'/%3E%3Ccircle cx='424' cy='150' r='3'/%3E%3Ccircle cx='540' cy='90' r='4'/%3E%3Ccircle cx='170' cy='222' r='3'/%3E%3Ccircle cx='484' cy='230' r='4'/%3E%3Cpath d='M124 84l96 53M228 137l100-63M336 74l84 72M427 148l109-55M227 143l-54 74M488 226l-60-74'/%3E%3C/svg%3E"); }
+/* achievements: trophy */
+#achievements{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M270 60h100v34c0 30-22 50-50 50s-50-20-50-50z'/%3E%3Cpath d='M270 72h-30c0 24 12 38 34 42M370 72h30c0 24-12 38-34 42'/%3E%3Cpath d='M320 144v26M284 186h72'/%3E%3Cpath d='M140 92v14M133 99h14'/%3E%3Cpath d='M500 210v14M493 217h14'/%3E%3C/svg%3E"); }
+/* journey: dashed route with stops */
+#journey{ --sec-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 900' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='M110 830C380 760 260 560 560 500C830 445 900 520 1120 430C1290 360 1290 220 1150 120' stroke-dasharray='2 12'/%3E%3Ccircle cx='110' cy='830' r='7'/%3E%3Ccircle cx='560' cy='500' r='7'/%3E%3Ccircle cx='1120' cy='430' r='7'/%3E%3Ccircle cx='1150' cy='120' r='7'/%3E%3Ccircle cx='900' cy='250' r='4'/%3E%3Ccircle cx='380' cy='680' r='4'/%3E%3Cpath d='M1340 520v16M1332 528h16'/%3E%3Cpath d='M200 240v16M192 248h16'/%3E%3C/svg%3E"); }
+/* beyond card: soft orbit rings */
+.verse-card-wrapper{
+  position: relative;
+}
+.verse-card-wrapper::before{
+  content: "";
+  position: absolute;
+  inset: -70px -40px;
+  background: var(--accent);
+  opacity: .05;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.4'%3E%3Cellipse cx='320' cy='150' rx='250' ry='92' transform='rotate(-8 320 150)'/%3E%3Cellipse cx='320' cy='150' rx='155' ry='54' transform='rotate(-8 320 150)'/%3E%3Ccircle cx='320' cy='150' r='9'/%3E%3Ccircle cx='546' cy='112' r='5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 300' fill='none' stroke='%23000' stroke-width='1.4'%3E%3Cellipse cx='320' cy='150' rx='250' ry='92' transform='rotate(-8 320 150)'/%3E%3Cellipse cx='320' cy='150' rx='155' ry='54' transform='rotate(-8 320 150)'/%3E%3Ccircle cx='320' cy='150' r='9'/%3E%3Ccircle cx='546' cy='112' r='5'/%3E%3C/svg%3E") center / contain no-repeat;
+  pointer-events: none;
+}
+.verse-card-wrapper{ z-index: 0; }
+.verse-card-wrapper .beyond-verse-card{ position: relative; z-index: 1; }
+/* ---- Mobile: art ko aur subtle / chhota ---- */
+@media (max-width: 760px){
+.showcase-section::before{ opacity: .04; }
+#journey::before{
+    opacity: .085;
+    -webkit-mask: var(--sec-art) center / min(760px, 130%) auto no-repeat;
+    mask: var(--sec-art) center / min(760px, 130%) auto no-repeat;
+  }
+.verse-card-wrapper::before{ inset: -46px -18px; opacity: .04; }
+
+}
+@media (max-width: 560px){
+#skills .skill-card::after{
+    width: 96px;
+    height: 62px;
+    right: 64px;
+    opacity: .07;
+  }
+
+}
+/* ==========================================================
+   SKILL DETAIL PAGES corner blueprint art + faint dot grid
+   (cards open karne par andar halka design)
+   ========================================================== */
+.skill-detail-page{
+  position: relative;
+}
+.skill-detail-page > *{
+  position: relative;
+  z-index: 1;
+}
+.skill-detail-page::before{
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: auto;
+  right: 0;
+  transform: none;
+  width: min(330px, 40vw);
+  height: 250px;
+  background: var(--accent);
+  opacity: .075;
+  -webkit-mask: var(--page-art) center / contain no-repeat;
+  mask: var(--page-art) center / contain no-repeat;
+  pointer-events: none;
+}
+.skill-detail-page::after{
+  content: "";
+  position: absolute;
+  inset: 10px 0 0;
+  background-image: radial-gradient(rgba(255, 255, 255, .9) 1px, transparent 1.3px);
+  background-size: 26px 26px;
+  opacity: .032;
+  pointer-events: none;
+}
+@media (max-width: 640px){
+.skill-detail-page::before{
+    width: 190px;
+    height: 145px;
+    right: -14px;
+    opacity: .06;
+  }
+
+}
+/* per-page corner motifs */
+.art-programming{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M104 62 40 120l64 58M216 62l64 58-64 58M178 42l-46 156'/%3E%3Cpath d='M40 34v16M32 42h16'/%3E%3Cpath d='M272 170v14M265 177h14'/%3E%3Ccircle cx='290' cy='70' r='3'/%3E%3C/svg%3E"); }
+.art-dsa{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='160' cy='42' r='12'/%3E%3Ccircle cx='100' cy='112' r='10'/%3E%3Ccircle cx='220' cy='112' r='10'/%3E%3Ccircle cx='54' cy='188' r='9'/%3E%3Ccircle cx='146' cy='188' r='9'/%3E%3Ccircle cx='196' cy='188' r='9'/%3E%3Ccircle cx='272' cy='188' r='9'/%3E%3Cpath d='M152 52l-42 50M168 52l42 50M94 121l-32 59M106 121l32 59M214 121l-14 58M226 121l38 59'/%3E%3C/svg%3E"); }
+.art-frontend{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='26' y='38' width='200' height='140' rx='11'/%3E%3Cpath d='M26 64h200'/%3E%3Ccircle cx='42' cy='51' r='3'/%3E%3Ccircle cx='54' cy='51' r='3'/%3E%3Ccircle cx='66' cy='51' r='3'/%3E%3Cpath d='M44 90h70M44 108h48'/%3E%3Crect x='44' y='124' width='58' height='36' rx='6'/%3E%3Cpath d='M118 90h88M118 108h60M118 126h74M118 144h44'/%3E%3Cpath d='M258 176v18M249 185h18'/%3E%3Ccircle cx='276' cy='46' r='3.4'/%3E%3C/svg%3E"); }
+.art-backend{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='34' y='28' width='152' height='42' rx='8'/%3E%3Crect x='34' y='82' width='152' height='42' rx='8'/%3E%3Crect x='34' y='136' width='152' height='42' rx='8'/%3E%3Ccircle cx='52' cy='49' r='3.4'/%3E%3Ccircle cx='52' cy='103' r='3.4'/%3E%3Ccircle cx='52' cy='157' r='3.4'/%3E%3Cpath d='M74 49h92M74 103h92M74 157h92'/%3E%3Cellipse cx='252' cy='164' rx='34' ry='10'/%3E%3Cpath d='M218 164v40c0 5.5 15 10 34 10s34-4.5 34-10v-40'/%3E%3Cpath d='M186 107h32'/%3E%3Ccircle cx='224' cy='107' r='3.4'/%3E%3C/svg%3E"); }
+.art-database{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cellipse cx='118' cy='46' rx='70' ry='17'/%3E%3Cpath d='M48 46v118c0 9.4 31.3 17 70 17s70-7.6 70-17V46'/%3E%3Cpath d='M48 88c0 9.4 31.3 17 70 17s70-7.6 70-17M48 130c0 9.4 31.3 17 70 17s70-7.6 70-17'/%3E%3Cellipse cx='256' cy='150' rx='36' ry='11'/%3E%3Cpath d='M220 150v42c0 6 16 11 36 11s36-5 36-11v-42'/%3E%3Cpath d='M220 172c0 6 16 11 36 11s36-5 36-11'/%3E%3C/svg%3E"); }
+.art-api{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='126' y='92' width='68' height='56' rx='12'/%3E%3Cpath d='M144 92V72M176 92V72'/%3E%3Cpath d='M126 120H62c-20 0-16 34-40 34'/%3E%3Cpath d='M194 120h64c20 0 16 34 40 34'/%3E%3Ccircle cx='18' cy='154' r='5'/%3E%3Ccircle cx='302' cy='154' r='5'/%3E%3Ccircle cx='160' cy='176' r='5'/%3E%3Cpath d='M160 148v23'/%3E%3Cpath d='M60 46v14M53 53h14'/%3E%3Cpath d='M262 190v14M255 197h14'/%3E%3C/svg%3E"); }
+.art-aiml{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='58' cy='62' r='9'/%3E%3Ccircle cx='58' cy='120' r='9'/%3E%3Ccircle cx='58' cy='178' r='9'/%3E%3Ccircle cx='160' cy='42' r='8'/%3E%3Ccircle cx='160' cy='94' r='8'/%3E%3Ccircle cx='160' cy='146' r='8'/%3E%3Ccircle cx='160' cy='198' r='8'/%3E%3Ccircle cx='262' cy='88' r='9'/%3E%3Ccircle cx='262' cy='152' r='9'/%3E%3Cpath d='M66 66l86-21M67 117l85-20M67 121l85 22M67 174l85-24M66 70l86 21M168 48l86 36M168 98l86-6M168 100l86 48M168 150l86-4M168 152l86 42M168 202l86-46'/%3E%3C/svg%3E"); }
+.art-deploy{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M70 34v172'/%3E%3Ccircle cx='70' cy='42' r='9'/%3E%3Ccircle cx='70' cy='130' r='9'/%3E%3Ccircle cx='70' cy='206' r='9'/%3E%3Ccircle cx='190' cy='96' r='9'/%3E%3Cpath d='M79 130c30 0 20-34 102-34'/%3E%3Cpath d='M190 105v40'/%3E%3Ccircle cx='258' cy='62' r='22'/%3E%3Cpath d='M258 74V46M245 57l13-13 13 13'/%3E%3C/svg%3E"); }
+.art-tools{ --page-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 240' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='26' y='40' width='176' height='126' rx='11'/%3E%3Cpath d='M26 66h176'/%3E%3Ccircle cx='42' cy='53' r='3'/%3E%3Ccircle cx='54' cy='53' r='3'/%3E%3Cpath d='M48 96l22 18-22 18M84 132h44'/%3E%3Ccircle cx='248' cy='152' r='17'/%3E%3Ccircle cx='248' cy='152' r='7'/%3E%3Cpath d='M248 128v-10M248 176v10M224 152h-10M272 152h10M231 135l-7-7M265 169l7 7M265 135l7-7M231 169l-7 7'/%3E%3C/svg%3E"); }
+/* ---- courses / soft-skills: hover effect REMOVED (static cards) ---- */
+#courses .skill-card:hover,
+#soft-skills .skill-card:hover{
+  transform: none;
+  border-color: rgba(235, 243, 250, 0.15);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.022) 48%, rgba(255, 255, 255, 0.04)),
+    color-mix(in srgb, var(--accent) 3%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 14px 34px rgba(0, 0, 0, 0.32);
+}
+/* ---- skill detail pages: prev/next EDGE-PINNED (beyond coding verse
+   pattern) dono buttons har page pe EXACT same coords: left/right
+   viewport edges, vertically centred. Content se kabhi nahi takrate. ---- */
+.skill-page-navigation{
+  position: fixed;
+  left: clamp(12px, 2.2vw, 30px);
+  right: clamp(12px, 2.2vw, 30px);
+  top: 50%;
+  bottom: auto;
+  transform: translateY(-50%);
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: none;
+  z-index: 40;
+}
+.skill-page-navigation .skill-page-btn{ pointer-events: auto; }
+.skill-page-navigation.single-next{ justify-content: flex-end; }
+.skill-page-navigation.single-prev{ justify-content: flex-start; }
+.skill-page-btn{
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid rgba(235, 243, 250, 0.16);
+  border-radius: 999px;
+  background: rgba(8, 13, 19, 0.78);
+  color: var(--text) !important;
+  line-height: 0;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+  transition: transform .22s ease, border-color .22s ease, background .22s ease, color .22s ease;
+}
+.skill-page-btn:hover{
+  transform: scale(1.05);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, rgba(8, 13, 19, 0.78));
+  color: var(--accent) !important;
+  box-shadow: none;
+}
+@media (max-width: 700px){
+/* Mobile: bottom corners (thumb zone) content 90% width hai, side
+     buttons text ke upar aa jate */
+.skill-page-navigation{
+    top: auto;
+    transform: none;
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+  }
+.skill-page-btn{ width: 44px; height: 44px; }
+
+}
+/* ==========================================================
+   WELCOME + ABOUT hero ambience (accent-masked line art)
+   ========================================================== */
+/* ---- WELCOME: orbit rings right side + viewfinder brackets ----
+   NOTE: .welcome::before purane round me !important se band kiya gaya
+   hai (line ~1741) isliye art .welcome-inner::before pe hai. */
+.welcome-inner{
+  position: relative;
+}
+.welcome-inner::before{
+  content: "";
+  position: absolute;
+  inset: -110px -320px -110px -30px;
+  z-index: -1;
+  background: var(--accent);
+  opacity: .07;
+  pointer-events: none;
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 760' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M96 96v18M87 105h18'/%3E%3Cpath d='M652 596v18M643 605h18'/%3E%3C/svg%3E") no-repeat 74% 44% / min(730px, 66vw) auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M86 28V16a4 4 0 0 0-4-4H70'/%3E%3C/svg%3E") no-repeat 6% 16% / 74px auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M4 62v12a4 4 0 0 0 4 4h12'/%3E%3C/svg%3E") no-repeat 94% 82% / 74px auto;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 760' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M96 96v18M87 105h18'/%3E%3Cpath d='M652 596v18M643 605h18'/%3E%3C/svg%3E") no-repeat 74% 44% / min(730px, 66vw) auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M86 28V16a4 4 0 0 0-4-4H70'/%3E%3C/svg%3E") no-repeat 6% 16% / 74px auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M4 62v12a4 4 0 0 0 4 4h12'/%3E%3C/svg%3E") no-repeat 94% 82% / 74px auto;
+}
+/* ---- ABOUT: broadcast arcs left (MOHIT ke piche) + orbit ring right ---- */
+.hero-about::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--accent);
+  opacity: .06;
+  pointer-events: none;
+  -webkit-mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420' fill='none' stroke='%23000' stroke-width='1.7'%3E%3Ccircle cx='0' cy='210' r='130'/%3E%3Ccircle cx='0' cy='210' r='222'/%3E%3Ccircle cx='0' cy='210' r='314'/%3E%3Cellipse cx='330' cy='86' rx='62' ry='23' transform='rotate(-18 330 86)'/%3E%3Ccircle cx='384' cy='70' r='4.5'/%3E%3Cpath d='M300 300v16M292 308h16'/%3E%3Cpath d='M80 52v16M72 60h16'/%3E%3C/svg%3E") no-repeat -60px 34% / min(430px, 46vw) auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420' fill='none' stroke='%23000' stroke-width='1.7'%3E%3Ccircle cx='0' cy='210' r='130'/%3E%3Ccircle cx='0' cy='210' r='222'/%3E%3Ccircle cx='0' cy='210' r='314'/%3E%3Cellipse cx='330' cy='86' rx='62' ry='23' transform='rotate(-18 330 86)'/%3E%3Ccircle cx='384' cy='70' r='4.5'/%3E%3Cpath d='M300 300v16M292 308h16'/%3E%3Cpath d='M80 52v16M72 60h16'/%3E%3C/svg%3E") no-repeat 96% 8% / min(300px, 30vw) auto;
+  mask:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420' fill='none' stroke='%23000' stroke-width='1.7'%3E%3Ccircle cx='0' cy='210' r='130'/%3E%3Ccircle cx='0' cy='210' r='222'/%3E%3Ccircle cx='0' cy='210' r='314'/%3E%3Cellipse cx='330' cy='86' rx='62' ry='23' transform='rotate(-18 330 86)'/%3E%3Ccircle cx='384' cy='70' r='4.5'/%3E%3Cpath d='M300 300v16M292 308h16'/%3E%3Cpath d='M80 52v16M72 60h16'/%3E%3C/svg%3E") no-repeat -60px 34% / min(430px, 46vw) auto,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 420 420' fill='none' stroke='%23000' stroke-width='1.7'%3E%3Ccircle cx='0' cy='210' r='130'/%3E%3Ccircle cx='0' cy='210' r='222'/%3E%3Ccircle cx='0' cy='210' r='314'/%3E%3Cellipse cx='330' cy='86' rx='62' ry='23' transform='rotate(-18 330 86)'/%3E%3Ccircle cx='384' cy='70' r='4.5'/%3E%3Cpath d='M300 300v16M292 308h16'/%3E%3Cpath d='M80 52v16M72 60h16'/%3E%3C/svg%3E") no-repeat 96% 8% / min(300px, 30vw) auto;
+}
+.hero-left,
+.hero-right{
+  position: relative;
+  z-index: 1;
+}
+/* mobile: hero art aur bhi subtle */
+@media (max-width: 760px){
+.welcome-inner::before{ opacity: .045; inset: -60px -80px -60px -10px; }
+.hero-about::after{ opacity: .04; }
+
+}
+/* ---- WELCOME solar system live orbiting dots (rings ab real SVG) ---- */
+.welcome-orbits{
+  position: absolute;
+  top: 50%;
+  right: 1.5%;
+  width: min(680px, 54vw);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  z-index: -1;
+  color: var(--accent);
+  opacity: .17;
+  pointer-events: none;
+}
+.welcome-orbits svg{ display: block; width: 100%; height: 100%; }
+.welcome-orbits .w-ring{ stroke: currentColor; stroke-opacity: .5; }
+.welcome-orbits .w-dot{ fill: currentColor; fill-opacity: .9; }
+.welcome-orbits .w-core{ fill: currentColor; fill-opacity: .95; }
+.welcome-orbits .w-core-glow{ fill: currentColor; fill-opacity: .1; }
+.welcome-orbits .w-arc{ stroke: currentColor; stroke-opacity: .55; stroke-linecap: round; }
+.welcome-orbits .w-arc-1{ animation-duration: 70s; }
+.welcome-orbits .w-arc-2{ animation-duration: 110s; animation-direction: reverse; }
+.welcome-orbits .w-orb{
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: w-orbit-spin linear infinite;
+}
+.welcome-orbits .w-orb-1{ animation-duration: 36s; }
+.welcome-orbits .w-orb-2{ animation-duration: 24s; animation-direction: reverse; animation-delay: -8s; }
+.welcome-orbits .w-orb-3{ animation-duration: 15s; animation-delay: -4s; }
+@keyframes w-orbit-spin{
+  to { transform: rotate(360deg); }
+}
+@media (max-width: 760px){
+.welcome-orbits{
+    width: min(560px, 96vw);
+    right: -24%;
+    opacity: .1;
+  }
+
+}
+/* ==========================================================
+   TRAILER PERFORMANCE video chalte waqt bhaari effects band
+   ==========================================================
+   Music player position:fixed z-index:200 par hai, aur uska
+   backdrop-filter: blur(26px) saturate(170%) THEEK video ke upar
+   baithta hai. Browser ko har video frame ke liye poora 26px blur
+   dobara calculate karna padta hai 60fps par ye sabse bada
+   single FPS killer hai (khaas kar laptop/integrated GPU par).
+
+   Trailer khula ho to blur band, uski jagah solid background.
+   Dikhta ekdum same hai (background waise bhi 55% opaque tha),
+   par GPU ka kaam lagbhag zero.
+
+   :has() support karta hai Chrome 105+, Safari 15.4+, Firefox 121+
+ purane browser me rule chup-chaap skip ho jata hai, kuch tootta nahi.
+   ========================================================== */
+/* Trailer stage ke andar ke floating buttons (X, mute, prev/next) bhi
+   frosted-glass use karte hain. Video ke upar ye teen-chaar chhote blurs
+   bhi mil kar mehne pad jate hain inhe solid kar do. */
+body:has(.verse-detail.is-open) .verse-detail .skill-overlay-close, body:has(.verse-detail.is-open) .verse-detail .verse-close, body:has(.verse-detail.is-open) .verse-detail .verse-prev, body:has(.verse-detail.is-open) .verse-detail .verse-next{
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  background: rgba(8, 13, 19, 0.86);
+}

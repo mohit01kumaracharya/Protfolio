@@ -1,0 +1,86 @@
+/* ==========================================================
+   DYNAMIC THEME
+   ========================================================== */
+:root{
+  --dyn-text: #FFFF66;
+  --dyn-text-dim: #DADA55;
+  --dyn-accent: #FFFF00;
+  --dyn-border: rgba(255, 255, 0, 0.22);
+}
+/* ==========================================================
+   SMOOTH TRANSITIONS
+   ========================================================== */
+/*
+  IMPORTANT:
+  Music player JavaScript har animation frame par theme colors
+  update karta hai. Isliye dynamic theme elements par transition
+  nahi lagana hai, warna flickering/stuttering hoti hai.
+*/
+/* Dynamic theme values are updated by requestAnimationFrame.
+   Do not animate them with CSS transitions. */
+body{
+  transition: none !important;
+}
+/* ==========================================================
+   TEXT
+   ========================================================== */
+body, p, .hero-right p, .contact-link, .lang-name{
+  color: var(--dyn-text);
+}
+p, .lang-name{
+  color: var(--dyn-text-dim);
+}
+/* ==========================================================
+   LINKS
+   ========================================================== */
+.contact-link{
+  color: var(--dyn-text);
+}
+.contact-link:hover{
+  color: var(--dyn-accent);
+}
+/* ==========================================================
+   SECTION NAV
+   ========================================================== */
+/* (Side navigation dots removed.) */
+/* ==========================================================
+   LANGUAGE BARS
+   ========================================================== */
+.lang-bar{
+  background: color-mix(
+    in srgb,
+    var(--dyn-accent) 15%,
+    transparent
+  );
+}
+.lang-bar i{
+  background: var(--dyn-accent);
+}
+/* ==========================================================
+   BUTTONS
+   ========================================================== */
+.verse-btn{
+  background: var(--dyn-accent);
+  color: #fff;
+}
+.verse-btn:hover{
+  box-shadow:
+    0 10px 30px
+    color-mix(
+      in srgb,
+      var(--dyn-accent) 35%,
+      transparent
+    );
+}
+/* ==========================================================
+   JOURNEY
+   ========================================================== */
+#journey .journey-dot{
+  border-color: var(--dyn-accent);
+}
+#journey .journey-item{
+  border-color: var(--dyn-accent);
+}
+/* ==========================================================
+   MUSIC PLAYER
+   ========================================================== */
